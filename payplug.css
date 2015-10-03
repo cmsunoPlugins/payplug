@@ -1,0 +1,8 @@
+table.payplugTO {}
+table.payplugTO td{border:1px solid #888;padding:5px 10px;}
+table.payplugTO td:nth-child(1){}
+table.payplugTO td:nth-child(2){color:#666;}
+.payplugDate{float:right;width:auto;font-size:1.1em;padding:0 30px 0 0;margin:0;}
+.payplugListArchiv{float:left;width:24%;cursor:pointer;text-decoration:underline;}
+#payplugArchData{margin-bottom:10px;}
+#payplugArchiv{margin:15px 10px;}
