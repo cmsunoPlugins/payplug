@@ -21,7 +21,7 @@ u::::::::::::::u  n::::n    n::::n  o:::::ooooo:::::o
      \____/           \/    \/            \__/
 </pre>
 
-### Payplug ###
+## Payplug ##
 
 Like Paypal. Adds a button in CKEditor to create  as many Payplug buttons.
 More efficient and economical for sale by CB or Mastercard.
@@ -29,3 +29,8 @@ Sales are checked and recorded with IPN return.
 Works also with digital goods and cart plugin.
 
 [CMSUno](https://github.com/boiteasite/cmsuno)
+
+### Versions ###
+
+* 1.0.1 - 07/10/2015 : Fix small display bug
+* 1.0 - 05/10/2015 : First stable version

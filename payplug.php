@@ -184,7 +184,7 @@ if (isset($_POST['action']))
 					echo '<td style="text-align:center">'.'/'.'</td>'; // Added later
 					echo '<td>'.$item.'</td>';
 					echo '<td>'.(intval($r['amount'])/100).' Eur</td>';
-					echo '<td style="text-align:center" '.(!$r['treated']?'onClick="f_treated_payplug(this,\''.$r['idTransaction'].'\',\''._("No").'\')"':'').($r['treated']?'>'._("Yes"):' class="yesno">'._("No")).'</td>';
+					echo '<td style="text-align:center" '.(!$r['treated']?'onClick="f_treated_payplug(this,\''.$r['idTransaction'].'\',\''._("Yes").'\')"':'').($r['treated']?'>'._("Yes"):' class="yesno">'._("No")).'</td>';
 					echo '</tr>';
 					}
 				}
