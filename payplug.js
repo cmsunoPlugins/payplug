@@ -71,7 +71,7 @@ function f_payplugVente(){
 	document.getElementById('payplugC').className="bouton fr";
 	document.getElementById('payplugV').className="bouton fr current";
 	document.getElementById('payplugD').style.display="none";
-	jQuery.post('uno/plugins/payplug/payplug.php',{'action':'vente','unox':Unox},function(r){jQuery('#payplugVente').append(r);});
+	jQuery.post('uno/plugins/payplug/payplug.php',{'action':'vente','unox':Unox,'udep':Udep},function(r){jQuery('#payplugVente').append(r);});
 }
 function f_payplugDetail(f){
 	jQuery('#payplugDetail').empty();
@@ -87,6 +87,10 @@ function f_payplugDetail(f){
 		if(r.substr(0,1)!='!')jQuery('#payplugDetail').append(r);
 		else f_alert(r);
 	});
+}
+function f_supp_payplug(f,g){
+	f.parentNode.parentNode.removeChild(f.parentNode);
+	jQuery.post('uno/plugins/payplug/payplug.php',{'action':'supptest','unox':Unox,'file':g},function(r){f_alert(r);});
 }
 //
 f_load_payplug();f_payplugVente();

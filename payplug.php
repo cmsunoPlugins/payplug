@@ -147,7 +147,7 @@ if (isset($_POST['action']))
 		if(count($tab))
 			{
 			echo '<br /><table>';
-			echo '<tr><th>'._("Date").'</th><th>'._("Type").'</th><th>'._("Name").'</th><th>'._("Address").'</th><th>'._("Article").'</th><th>'._("Price").'</th><th>'._("Treated").'</th></tr>';
+			echo '<tr><th>'._("Date").'</th><th>'._("Type").'</th><th>'._("Name").'</th><th>'._("Address").'</th><th>'._("Article").'</th><th>'._("Price").'</th><th>'._("Treated").'</th><th>'._("Del").'</th></tr>';
 			$b = array();
 			foreach($tab as $r)
 				{
@@ -185,6 +185,8 @@ if (isset($_POST['action']))
 					echo '<td>'.$item.'</td>';
 					echo '<td>'.(intval($r['amount'])/100).' Eur</td>';
 					echo '<td style="text-align:center" '.(!$r['treated']?'onClick="f_treated_payplug(this,\''.$r['idTransaction'].'\',\''._("Yes").'\')"':'').($r['treated']?'>'._("Yes"):' class="yesno">'._("No")).'</td>';
+					if(isset($r['isTest']) && $r['isTest']==true) echo '<td width="30px" style="cursor:pointer;background:transparent url(\''.$_POST['udep'].'includes/img/close.png\') no-repeat scroll center center;" onClick="f_supp_payplug(this,\''.$r['idTransaction'].'\')">&nbsp;</td>';
+					else echo '<td></td>';
 					echo '</tr>';
 					}
 				}
@@ -264,6 +266,15 @@ if (isset($_POST['action']))
 			$o .= '<div class="bouton fr" '.((isset($a['treated']) && $a['treated']==0)?'style="display:none;"':'').' onClick="f_archivOrderPayplug(\''.$_POST['id'].'\',\''._("Are you sure ?").'\')" title="">'._("Archive").'</div>';
 			$o .= '<div style="clear:both;"></div>';
 			echo $o;
+			}
+		else echo '!'._('Error');
+		break;
+		// ********************************************************************************************
+		case 'supptest':
+		if(file_exists('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['file'].'.json'))
+			{
+			unlink('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['file'].'.json');
+			echo _('Removed');
 			}
 		else echo '!'._('Error');
 		break;
