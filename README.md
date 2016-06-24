@@ -32,6 +32,7 @@ Works also with digital goods and cart plugin.
 
 ### Versions ###
 
+* 1.0.3 - 24/06/2016 : Fix a display bug in the mail title.
 * 1.0.2 - 20/03/2016 : Test payment can be removed
 * 1.0.1 - 07/10/2015 : Fix small display bug
 * 1.0 - 05/10/2015 : First stable version
