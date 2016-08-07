@@ -75,7 +75,7 @@ try
 				{
 				$q = file_get_contents(dirname(__FILE__).'/../../data/'.$Ubusy.'/site.json'); $b2 = json_decode($q,true);
 				$msg = "<table>";
-				foreach($ipn as $k=>$v) $msg .= "<tr><td>".$k."&nbsp:&nbsp</td><td>".$v."</td></tr>\r\n";
+				foreach($ipn as $k=>$v) if($v) $msg .= "<tr><td>".$k." : </td><td>".$v."</td></tr>\r\n";
 				$msg .= "</table>\r\n";
 				// MAIL ADMIN PAYMENT
 				mailAdmin('Payplug - '._('Payment receipt').' : '.(($ipn->amount)/100).' EUR', $msg, $bottom, $top, $b2['url']);
