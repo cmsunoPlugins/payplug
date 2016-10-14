@@ -22,7 +22,7 @@ if(file_exists('data/_sdata-'.$sdata.'/payplug.json'))
 		$tmp .= "}};";
 		$tmp .= "</script>"."\r\n";
 		$Ufoot .= $tmp;
-		$Uonload .= "if('ok'==unoGvu('payplug')){unoPop('"._('Thank you for your payment')."',5000);document.cookie='cart=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';}";
+		$Uonload .= "if('ok'==unoGvu('payplug')){unoPop('".T_('Thank you for your payment')."',5000);document.cookie='cart=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';}";
 		$unoPop=1; // include unoPop.js in output
 		}
 	}

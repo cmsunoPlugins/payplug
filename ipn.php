@@ -47,7 +47,7 @@ try
 					}
 				file_put_contents(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/_digital/'.$d[3].$d[2].'.json', '{"t":"'.time().'","p":"payplug","d":"'.$d[2].'","k":"'.$d[3].'"}');
 				// link to zip in mail
-				$msg= $d[2].'.zip :<br />'."\r\n".'<a href="'.$b2['url'].'/files/upload/'.$d[3].$d[2].'.zip">'.$b2['url'].'/files/upload/'.$d[3].$d[2].".zip</a>\r\n<br /><br />\r\n"._('Thank you for your trust, see you soon!')."\r\n";
+				$msg= $d[2].'.zip :<br />'."\r\n".'<a href="'.$b2['url'].'/files/upload/'.$d[3].$d[2].'.zip">'.$b2['url'].'/files/upload/'.$d[3].$d[2].".zip</a>\r\n<br /><br />\r\n".T_('Thank you for your trust, see you soon!')."\r\n";
 				// MAIL USER LINK TO ZIP
 				mailUser($ipn->email, 'Download - '.$d[2], $msg, $bottom, $top);
 				}
@@ -78,20 +78,20 @@ try
 				foreach($ipn as $k=>$v) if($v) $msg .= "<tr><td>".$k." : </td><td>".$v."</td></tr>\r\n";
 				$msg .= "</table>\r\n";
 				// MAIL ADMIN PAYMENT
-				mailAdmin('Payplug - '._('Payment receipt').' : '.(($ipn->amount)/100).' EUR', $msg, $bottom, $top, $b2['url']);
-				$msgOrder .= '</p><p>'._('Total').' : <strong>'.$p.' &euro;</strong></p>';
+				mailAdmin('Payplug - '.T_('Payment receipt').' : '.(($ipn->amount)/100).' EUR', $msg, $bottom, $top, $b2['url']);
+				$msgOrder .= '</p><p>'.T_('Total').' : <strong>'.$p.' &euro;</strong></p>';
 				$msgOrder = str_replace(".",",",$msgOrder);
-				$msgOrder .= '<p>'._('Paid by Payplug').'.</p><hr /><p>'._('Name').' : '.$name.'<br />'._('Address').' : '.$adre.'<br />'._('Mail').' : '.$mail.'</p>';
+				$msgOrder .= '<p>'.T_('Paid by Payplug').'.</p><hr /><p>'.T_('Name').' : '.$name.'<br />'.T_('Address').' : '.$adre.'<br />'.T_('Mail').' : '.$mail.'</p>';
 				if($b)
 					{
 					// MAIL ADMIN ORDER
-					mailAdmin(_('New order by Payplug'). ' - '.$ipn->idTransaction, $msgOrder, $bottom, $top, $b2['url']);
+					mailAdmin(T_('New order by Payplug'). ' - '.$ipn->idTransaction, $msgOrder, $bottom, $top, $b2['url']);
 					// MAIL USER ORDER
 					$iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND);
 					$r = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, 'payment', $ipn->idTransaction.'|'.$mail, MCRYPT_MODE_ECB, $iv));
-					$info = "<a href='".stripslashes($b2['url']).'/uno/plugins/payment/paymentOrder.php?a=look&b='.urlencode($r)."&t=payplug'>"._("Follow the evolution of your order")."</a>";
-					$msgOrderU = $msgOrder.'<br /><p>'._('Thank you for your trust.').'</p><p>'.$info.'</p>';
-					mailUser($mail, $b2['tit'].' - '._('Order'), $msgOrderU, $bottom, $top, $b2['url'].'/'.$Ubusy.'.html');
+					$info = "<a href='".stripslashes($b2['url']).'/uno/plugins/payment/paymentOrder.php?a=look&b='.urlencode($r)."&t=payplug'>".T_("Follow the evolution of your order")."</a>";
+					$msgOrderU = $msgOrder.'<br /><p>'.T_('Thank you for your trust.').'</p><p>'.$info.'</p>';
+					mailUser($mail, $b2['tit'].' - '.T_('Order'), $msgOrderU, $bottom, $top, $b2['url'].'/'.$Ubusy.'.html');
 					}
 				// ADD MEMO TAX
 				$q1 = file_get_contents(dirname(__FILE__).'/../../data/'.$Ubusy.'/payment.json'); $a1 = json_decode($q1,true);
@@ -105,7 +105,7 @@ try
 				$msg = "<table>";
 				foreach($ipn as $k=>$v) $msg .= "<tr><td>".$k."&nbsp:&nbsp</td><td>".$v."</td></tr>\r\n";
 				$msg .= "</table>\r\n";
-				mailAdmin('Payplug - '._('Payment receipt').' : '.(($ipn->amount)/100).' EUR', $msg, $bottom, $top, $b2['url']);
+				mailAdmin('Payplug - '.T_('Payment receipt').' : '.(($ipn->amount)/100).' EUR', $msg, $bottom, $top, $b2['url']);
 				}
 			}
 		file_put_contents(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/_payplug/'.$ipn->idTransaction.'.json', $ipn2);
