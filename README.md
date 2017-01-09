@@ -32,6 +32,7 @@ Works also with digital goods and cart plugin.
 
 ### Versions ###
 
+* 1.2 - 09/01/2017 : Easier archive management
 * 1.1 - 14/10/2016 : Use PHP-Gettext in place of gettext
 * 1.0.4 - 07/08/2016 : Fix bug.
 * 1.0.3 - 24/06/2016 : Fix a display bug in the mail title.

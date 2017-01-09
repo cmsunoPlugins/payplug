@@ -137,6 +137,7 @@ if (isset($_POST['action']))
 				#payplugVente table td{text-align:left;padding:2px 6px;vertical-align:middle;color:#0b4a6a;}
 				#payplugVente table tr.PayplugTreatedYes td{color:green;}
 				#payplugVente table td.yesno{text-decoration:underline;cursor:pointer;}
+				#payplugVente .payplugArchiv{width:16px;height:16px;margin:0 auto;background-position:-112px -96px;cursor:pointer;background-image:url("'.$_POST['udep'].'includes/img/ui-icons_444444_256x240.png")}
 			</style>';
 		$tab=''; $d='../../data/_sdata-'.$sdata.'/_payplug/';
 		if ($dh=opendir($d))
@@ -147,7 +148,7 @@ if (isset($_POST['action']))
 		if(count($tab))
 			{
 			echo '<br /><table>';
-			echo '<tr><th>'.T_("Date").'</th><th>'.T_("Type").'</th><th>'.T_("Name").'</th><th>'.T_("Address").'</th><th>'.T_("Article").'</th><th>'.T_("Price").'</th><th>'.T_("Treated").'</th><th>'.T_("Del").'</th></tr>';
+			echo '<tr><th>'.T_("Date").'</th><th>'.T_("Type").'</th><th>'.T_("Name").'</th><th>'.T_("Address").'</th><th>'.T_("Article").'</th><th>'.T_("Price").'</th><th>'.T_("Treated").'</th><th>'.T_("Del").'</th><th>'.T_("Archive").'</th></tr>';
 			$b = array();
 			foreach($tab as $r)
 				{
@@ -184,9 +185,10 @@ if (isset($_POST['action']))
 					echo '<td style="text-align:center">'.'/'.'</td>'; // Added later
 					echo '<td>'.$item.'</td>';
 					echo '<td>'.(intval($r['amount'])/100).' Eur</td>';
-					echo '<td style="text-align:center" '.(!$r['treated']?'onClick="f_treated_payplug(this,\''.$r['idTransaction'].'\',\''.T_("Yes").'\')"':'').($r['treated']?'>'.T_("Yes"):' class="yesno">'.T_("No")).'</td>';
+					echo '<td style="text-align:center;" '.(!$r['treated']?'onClick="f_treated_payplug(this,\''.$r['idTransaction'].'\',\''.T_("Yes").'\')"':'').($r['treated']?'>'.T_("Yes"):' class="yesno">'.T_("No")).'</td>';
 					if(isset($r['isTest']) && $r['isTest']==true) echo '<td width="30px" style="cursor:pointer;background:transparent url(\''.$_POST['udep'].'includes/img/close.png\') no-repeat scroll center center;" onClick="f_supp_payplug(this,\''.$r['idTransaction'].'\')">&nbsp;</td>';
 					else echo '<td></td>';
+					echo '<td><div class="payplugArchiv" onClick="f_archivOrderPayplug(\''.$r['idTransaction'].'\',\''.T_("Are you sure ?").'\')"></div></td>';
 					echo '</tr>';
 					}
 				}
@@ -211,29 +213,66 @@ if (isset($_POST['action']))
 		break;
 		// ********************************************************************************************
 		case 'restaur':
-		if(file_exists('../../data/_sdata-'.$sdata.'/_payplug/archive/'.$_POST['f']) && rename('../../data/_sdata-'.$sdata.'/_payplug/archive/'.$_POST['f'],'../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['f'])) echo T_('Restored');
+		$d = $_POST['f'];
+		$a = explode('__',$d);
+		if(count($a)>2) $d1 = $a[0].'.json';
+		else $d1 = $d;
+		if(file_exists('../../data/_sdata-'.$sdata.'/_payplug/archive/'.$d) && rename('../../data/_sdata-'.$sdata.'/_payplug/archive/'.$d, '../../data/_sdata-'.$sdata.'/_payplug/'.$d1)) echo T_('Restored');
 		else echo '!'.T_('Error');
 		break;
 		// ********************************************************************************************
 		case 'archiv':
-		if(!is_dir('../../data/_sdata-'.$sdata.'/_payplug/archive')) mkdir('../../data/_sdata-'.$sdata.'/_payplug/archive',0711);
-		if(file_exists('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['id'].'.json') && rename('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['id'].'.json','../../data/_sdata-'.$sdata.'/_payplug/archive/'.$_POST['id'].'.json')) echo T_('Archived');
+		$p = '../../data/_sdata-'.$sdata.'/_payplug/archive';
+		if(!is_dir($p)) mkdir($p,0711);
+		$d = $_POST['id'].'.json';
+		$q = file_get_contents('../../data/_sdata-'.$sdata.'/_payplug/'.$d);
+		if($q) $a = json_decode($q,true);
+		else $a = array();
+		if(!empty($a['time']) && !empty($a['amount']))
+			{
+			$d1 = substr($d,0,-5).'__'.$a['time'].'__'.$a['amount'].'__.json';
+			}
+		else $d1 = $d;
+		if(file_exists('../../data/_sdata-'.$sdata.'/_payplug/'.$d) && rename('../../data/_sdata-'.$sdata.'/_payplug/'.$d, $p.'/'.$d1)) echo T_('Archived');
 		else echo '!'.T_('Error');
 		break;
 		// ********************************************************************************************
 		case 'viewArchiv':
-		if (is_dir('../../data/_sdata-'.$sdata.'/_payplug/archive') && $h=opendir('../../data/_sdata-'.$sdata.'/_payplug/archive'))
+		$p = '../../data/_sdata-'.$sdata.'/_payplug/archive';
+		if(is_dir($p) && $h=opendir($p))
 			{
-			$o = '<div id="payplugArchData"></div><div>';
+			$b = array();
 			while(($d=readdir($h))!==false)
 				{
 				$ext=explode('.',$d); $ext=$ext[count($ext)-1];
 				if($d!='.' && $d!='..' && $ext=='json')
 					{
-					$o .= '<div class="payplugListArchiv" onClick="f_payplugViewA(\''.$d.'\');">'.$d.'</div>';
+					if(strpos($d,'__')!==false)
+						{
+						$a = explode('__',$d);
+						if(count($a)>2) $b[] = array('idTransaction'=>$a[0], 'time'=>$a[1], 'amount'=>$a[2], 'file'=>$d);
+						}
+					else
+						{
+						$q = file_get_contents($p.'/'.$d);
+						if($q) $a = json_decode($q,true);
+						else $a = array();
+						if(!empty($a['time']) && !empty($a['amount']))
+							{
+							$d1 = substr($d,0,-5).'__'.$a['time'].'__'.$a['amount'].'__.json';
+							rename($p.'/'.$d, $p.'/'.$d1);
+							}
+						}
+					
 					}
 				}
 			closedir($h);
+			usort($b, function($f,$g) { return $g['time'] - $f['time'];});
+			$o = '<div id="payplugArchData"></div><div>';
+			foreach($b as $r)
+				{
+				$o .= '<div class="payplugListArchiv" onClick="f_payplugViewA(\''.$r['file'].'\');">'.$r['idTransaction'].' - '.date('dMy',$r['time']).' - '.substr($r['amount'],0,-2).'&euro;</div>';
+				}
 			echo $o.'</div><div style="clear:left;"></div>';
 			}
 		break;

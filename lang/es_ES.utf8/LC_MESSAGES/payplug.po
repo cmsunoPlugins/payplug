@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CmsUno\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-25 10:35+0100\n"
-"PO-Revision-Date: 2015-08-25 10:35+0100\n"
+"POT-Creation-Date: 2017-01-09 20:49+0100\n"
+"PO-Revision-Date: 2017-01-09 20:50+0100\n"
 "Last-Translator: jacques Malgrange <contacter@boiteasite.fr>\n"
 "Language-Team: Jacques Malgrange <contacter@boiteasite.fr>\n"
 "Language: \n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Report-\tmsgstr-Bugs-To: \n"
 "Report-\t\tmsgstr-Bugs-To: \n"
-"X-Poedit-KeywordsList: _\n"
+"X-Poedit-KeywordsList: _;T_\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-Country: SPAIN\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -37,12 +37,12 @@ msgid "Paid by Payplug"
 msgstr "A cargo Payplug"
 
 #: ../../../ipn.php:84
-#: ../../../payplug.php:150
+#: ../../../payplug.php:151
 msgid "Name"
 msgstr "Nombre"
 
 #: ../../../ipn.php:84
-#: ../../../payplug.php:150
+#: ../../../payplug.php:151
 msgid "Address"
 msgstr "Dirección"
 
@@ -71,7 +71,7 @@ msgid "Thank you for your payment"
 msgstr "Gracias por su pago"
 
 #: ../../../payplug.php:20
-#: ../../../payplug.php:243
+#: ../../../payplug.php:284
 msgid "Archives"
 msgstr "Archivos"
 
@@ -92,7 +92,7 @@ msgid "Sales"
 msgstr "Ventas"
 
 #: ../../../payplug.php:23
-#: ../../../payplug.php:257
+#: ../../../payplug.php:298
 msgid "Payment Details"
 msgstr "Detalles del pago"
 
@@ -216,59 +216,70 @@ msgstr "Configuración Imposible"
 msgid "List of the Payplug payments"
 msgstr "Lista de los pagos Payplug"
 
-#: ../../../payplug.php:150
+#: ../../../payplug.php:151
 msgid "Date"
 msgstr "Fecha"
 
-#: ../../../payplug.php:150
+#: ../../../payplug.php:151
 msgid "Type"
 msgstr "Escribe"
 
-#: ../../../payplug.php:150
+#: ../../../payplug.php:151
 msgid "Article"
 msgstr "Artículo"
 
-#: ../../../payplug.php:150
+#: ../../../payplug.php:151
 msgid "Price"
 msgstr "Precio"
 
-#: ../../../payplug.php:150
-#: ../../../payplug.php:204
+#: ../../../payplug.php:151
+#: ../../../payplug.php:208
 msgid "Treated"
 msgstr "Tratada"
 
-#: ../../../payplug.php:187
-msgid "No"
-msgstr "No"
+#: ../../../payplug.php:151
+msgid "Del"
+msgstr "Supr"
 
-#: ../../../payplug.php:187
+#: ../../../payplug.php:151
+#: ../../../payplug.php:305
+msgid "Archive"
+msgstr "Archivo"
+
+#: ../../../payplug.php:188
 msgid "Yes"
 msgstr "Si"
 
-#: ../../../payplug.php:208
-#: ../../../payplug.php:213
-#: ../../../payplug.php:219
-#: ../../../payplug.php:268
-msgid "Error"
-msgstr "Error"
+#: ../../../payplug.php:188
+msgid "No"
+msgstr "No"
 
-#: ../../../payplug.php:212
-msgid "Restored"
-msgstr "Restaurada"
-
-#: ../../../payplug.php:218
-msgid "Archived"
-msgstr "Archivada"
-
-#: ../../../payplug.php:249
-msgid "Restore"
-msgstr "Restaurar"
-
-#: ../../../payplug.php:264
+#: ../../../payplug.php:191
+#: ../../../payplug.php:305
 msgid "Are you sure ?"
 msgstr "¿Seguro?"
 
-#: ../../../payplug.php:264
-msgid "Archive"
-msgstr "Archivo"
+#: ../../../payplug.php:212
+#: ../../../payplug.php:221
+#: ../../../payplug.php:237
+#: ../../../payplug.php:309
+#: ../../../payplug.php:318
+msgid "Error"
+msgstr "Error"
+
+#: ../../../payplug.php:220
+msgid "Restored"
+msgstr "Restaurada"
+
+#: ../../../payplug.php:236
+msgid "Archived"
+msgstr "Archivada"
+
+#: ../../../payplug.php:290
+msgid "Restore"
+msgstr "Restaurar"
+
+#: ../../../payplug.php:316
+msgid "Removed"
+msgstr "Borrado"
 

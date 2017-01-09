@@ -103,7 +103,7 @@ try
 				{
 				// MAIL ADMIN PAYMENT
 				$msg = "<table>";
-				foreach($ipn as $k=>$v) $msg .= "<tr><td>".$k."&nbsp:&nbsp</td><td>".$v."</td></tr>\r\n";
+				foreach($ipn as $k=>$v) if(!empty($v)) $msg .= "<tr><td>".$k." : </td><td>".$v."</td></tr>\r\n";
 				$msg .= "</table>\r\n";
 				mailAdmin('Payplug - '.T_('Payment receipt').' : '.(($ipn->amount)/100).' EUR', $msg, $bottom, $top, $b2['url']);
 				}
