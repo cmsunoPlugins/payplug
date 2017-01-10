@@ -101,6 +101,7 @@ if (isset($_POST['action']))
 			$q = file_get_contents('../../data/_sdata-'.$sdata.'/payplug.json');
 			echo stripslashes($q);
 			}
+		else echo '[]';
 		break;
 		// ********************************************************************************************
 		case 'save':
