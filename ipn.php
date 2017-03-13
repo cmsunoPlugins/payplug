@@ -87,9 +87,9 @@ try
 					// MAIL ADMIN ORDER
 					mailAdmin(T_('New order by Payplug'). ' - '.$ipn->idTransaction, $msgOrder, $bottom, $top, $b2['url']);
 					// MAIL USER ORDER
-					$iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND);
-					$r = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, 'payment', $ipn->idTransaction.'|'.$mail, MCRYPT_MODE_ECB, $iv));
-					$info = "<a href='".stripslashes($b2['url']).'/uno/plugins/payment/paymentOrder.php?a=look&b='.urlencode($r)."&t=payplug'>".T_("Follow the evolution of your order")."</a>";
+					$iv = openssl_random_pseudo_bytes(16);
+					$r = base64_encode(openssl_encrypt($ipn->idTransaction.'|'.$mail, 'AES-256-CBC', substr($Ukey,0,32), OPENSSL_RAW_DATA, $iv));
+					$info = "<a href='".stripslashes($b2['url']).'/uno/plugins/payment/paymentOrder.php?a=look&b='.urlencode($r).'&i='.base64_encode($iv)."&t=payplug'>".T_("Follow the evolution of your order")."</a>";
 					$msgOrderU = $msgOrder.'<br /><p>'.T_('Thank you for your trust.').'</p><p>'.$info.'</p>';
 					mailUser($mail, $b2['tit'].' - '.T_('Order'), $msgOrderU, $bottom, $top, $b2['url'].'/'.$Ubusy.'.html');
 					}
@@ -135,36 +135,71 @@ function VerifIXNID($txn_id,$sdata)
 function mailAdmin($tit, $msg, $bottom, $top, $url)
 	{
 	global $mailAdmin;
-	$rn = "\r\n";
-	$boundary = "-----=".md5(rand());
-	$body = '<b><a href="'.$url.'/uno.php" style="color:#000000;">'.$tit.'</a></b><br />'.$rn.$msg.$rn;
+	$body = '<b><a href="'.$url.'/uno.php" style="color:#000000;">'.$tit.'</a></b><br />'."\r\n".$msg."\r\n";
 	$msgT = strip_tags($body);
 	$msgH = $top . $body . $bottom;
-	$header  = "From: ".$mailAdmin."<".$mailAdmin.">".$rn."Reply-To:".$mailAdmin."<".$mailAdmin.">MIME-Version: 1.0".$rn."Content-Type: multipart/alternative;".$rn." boundary=\"$boundary\"".$rn;
-	$msg= $rn."--".$boundary.$rn."Content-Type: text/plain; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgT.$rn;
-	$msg.=$rn."--".$boundary.$rn."Content-Type: text/html; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgH.$rn.$rn."--".$boundary."--".$rn.$rn."--".$boundary."--".$rn;
-	$subject = mb_encode_mimeheader(stripslashes($tit),"UTF-8");
-	if(mail($mailAdmin, $subject, stripslashes($msg), $header)) return true;
-	else return false;
+	if(file_exists(dirname(__FILE__).'/../newsletter/PHPMailer/PHPMailerAutoload.php'))
+		{
+		// PHPMailer
+		require_once(dirname(__FILE__).'/../newsletter/PHPMailer/PHPMailerAutoload.php');
+		$phm = new PHPMailer();
+		$phm->CharSet = "UTF-8";
+		$phm->setFrom($mailAdmin);
+		$phm->addReplyTo($mailAdmin);
+		$phm->AddAddress($mailAdmin);
+		$phm->isHTML(true);
+		$phm->Subject = stripslashes($tit);
+		$phm->Body = stripslashes($msgH);		
+		$phm->AltBody = stripslashes($msgT);
+		if($phm->Send()) return true;
+		else return false;
+		}
+	else
+		{
+		$rn = "\r\n";
+		$boundary = "-----=".md5(rand());
+		$header  = "From: ".$mailAdmin."<".$mailAdmin.">".$rn."Reply-To:".$mailAdmin."<".$mailAdmin.">MIME-Version: 1.0".$rn."Content-Type: multipart/alternative;".$rn." boundary=\"$boundary\"".$rn;
+		$msg= $rn."--".$boundary.$rn."Content-Type: text/plain; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgT.$rn;
+		$msg.=$rn."--".$boundary.$rn."Content-Type: text/html; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgH.$rn.$rn."--".$boundary."--".$rn.$rn."--".$boundary."--".$rn;
+		$subject = mb_encode_mimeheader(stripslashes($tit),"UTF-8");
+		if(mail($mailAdmin, $subject, stripslashes($msg), $header)) return true;
+		else return false;
+		}
 	}
 //
 function mailUser($dest, $tit, $msg, $bottom, $top, $url=false)
 	{
 	global $mailAdmin;
-	$rn = "\r\n";
-	$boundary = "-----=".md5(rand());
-	if($url) $body = '<b><a href="'.$url.'.html" style="color:#000000;">'.$tit.'</a></b><br />'.$rn.$msg.$rn;
-	else $body = "<b>".$tit."</b><br />".$rn.$msg.$rn;
+	if($url) $body = '<b><a href="'.$url.'.html" style="color:#000000;">'.$tit.'</a></b><br />'."\r\n".$msg."\r\n";
+	else $body = "<b>".$tit."</b><br />\r\n".$msg."\r\n";
 	$msgT = strip_tags($body);
 	$msgH = $top . $body . $bottom;
-	$header  = "From: ".$mailAdmin."<".$mailAdmin.">".$rn."Reply-To:".$mailAdmin."<".$mailAdmin.">MIME-Version: 1.0".$rn."Content-Type: multipart/alternative;".$rn." boundary=\"$boundary\"".$rn;
-	$msg= $rn."--".$boundary.$rn."Content-Type: text/plain; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgT.$rn;
-	$msg.=$rn."--".$boundary.$rn."Content-Type: text/html; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgH.$rn.$rn."--".$boundary."--".$rn.$rn."--".$boundary."--".$rn;
-	$subject = mb_encode_mimeheader(stripslashes($tit),"UTF-8");
-	if(mail($dest, $subject, stripslashes($msg), $header)) return true;
-	else return false;
+	if(file_exists(dirname(__FILE__).'/../newsletter/PHPMailer/PHPMailerAutoload.php'))
+		{
+		// PHPMailer
+		require_once(dirname(__FILE__).'/../newsletter/PHPMailer/PHPMailerAutoload.php');
+		$phm = new PHPMailer();
+		$phm->CharSet = "UTF-8";
+		$phm->setFrom($mailAdmin);
+		$phm->addReplyTo($mailAdmin);
+		$phm->AddAddress($dest);
+		$phm->isHTML(true);
+		$phm->Subject = stripslashes($tit);
+		$phm->Body = stripslashes($msgH);		
+		$phm->AltBody = stripslashes($msgT);
+		if($phm->Send()) return true;
+		else return false;
+		}
+	else
+		{
+		$rn = "\r\n";
+		$boundary = "-----=".md5(rand());
+		$header  = "From: ".$mailAdmin."<".$mailAdmin.">".$rn."Reply-To:".$mailAdmin."<".$mailAdmin.">MIME-Version: 1.0".$rn."Content-Type: multipart/alternative;".$rn." boundary=\"$boundary\"".$rn;
+		$msg = $rn."--".$boundary.$rn."Content-Type: text/plain; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgT.$rn;
+		$msg .= $rn."--".$boundary.$rn."Content-Type: text/html; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgH.$rn.$rn."--".$boundary."--".$rn.$rn."--".$boundary."--".$rn;
+		$subject = mb_encode_mimeheader(stripslashes($tit),"UTF-8");
+		if(mail($dest, $subject, stripslashes($msg), $header)) return true;
+		else return false;
+		}
 	}
-//
-//$er = error_get_last();
-//file_put_contents(dirname(__FILE__).'/../../data/errorIPNPayplug'.time().'.txt', $er);
 ?>

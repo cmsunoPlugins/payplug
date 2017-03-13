@@ -32,6 +32,7 @@ Works also with digital goods and cart plugin.
 
 ### Versions ###
 
+* 1.2.1 - 13/03/2017 : Lib Payplug 1.1.2 - Use PHPMailer if Newsletter plugin exists - Replace MCrypt by OpenSSL
 * 1.2 - 09/01/2017 : Easier archive management
 * 1.1 - 14/10/2016 : Use PHP-Gettext in place of gettext
 * 1.0.4 - 07/08/2016 : Fix bug.

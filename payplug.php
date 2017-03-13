@@ -140,10 +140,10 @@ if (isset($_POST['action']))
 				#payplugVente table td.yesno{text-decoration:underline;cursor:pointer;}
 				#payplugVente .payplugArchiv{width:16px;height:16px;margin:0 auto;background-position:-112px -96px;cursor:pointer;background-image:url("'.$_POST['udep'].'includes/img/ui-icons_444444_256x240.png")}
 			</style>';
-		$tab=''; $d='../../data/_sdata-'.$sdata.'/_payplug/';
-		if ($dh=opendir($d))
+		$tab = array(); $d = '../../data/_sdata-'.$sdata.'/_payplug/';
+		if($dh=opendir($d))
 			{
-			while (($file = readdir($dh))!==false) { if ($file!='.' && $file!='..' && $file!='parameters.json') $tab[]=$d.$file; }
+			while(($file = readdir($dh))!==false) { if($file!='.' && $file!='..' && $file!='parameters.json') $tab[] = $d.$file; }
 			closedir($dh);
 			}
 		if(count($tab))
@@ -153,9 +153,9 @@ if (isset($_POST['action']))
 			$b = array();
 			foreach($tab as $r)
 				{
-				$q=@file_get_contents($r);
-				$a=json_decode($q,true);
-				$b[]=$a;
+				$q = @file_get_contents($r);
+				$a = json_decode($q,true);
+				$b[] = $a;
 				}
 			function sortTime($u1,$u2) {return (isset($u2['time'])?$u2['time']:0) - (isset($u1['time'])?$u1['time']:0);}
 			usort($b, 'sortTime');
