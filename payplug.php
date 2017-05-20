@@ -80,6 +80,11 @@ if (isset($_POST['action']))
 				<h3><?php echo T_("Options :");?></h3>
 				<table class="hForm">
 					<tr>
+						<td><label><?php echo T_("No Payplug button");?></label></td>
+						<td><input type="checkbox" name="ckpayplugoff" id="ckpayplugoff" /></td>
+						<td><em><?php echo T_("You don't want to use the CKEditor Payplug Button.");?></em></td>
+					</tr>
+					<tr>
 						<td><label><?php echo T_("External use");?></label></td>
 						<td><input type="checkbox" name="payplugExt" id="payplugExt" /></td>
 						<td><em><?php echo T_("Use Payplug from another plugin : complete system with cart or digital product.");?></em></td>
@@ -115,6 +120,7 @@ if (isset($_POST['action']))
 		$a['mail'] = $_POST['mail'];
 		$a['mod'] = $_POST['mod'];
 		$a['ext'] = ($_POST['ext']?1:0);
+		$a['ckpayplugoff'] = ($_POST['ckpayplugoff']?1:0);
 		$a['url'] = substr($_SERVER['HTTP_REFERER'],0,-4).'/plugins/payplug/ipn.php';
 		$a['home'] = substr($_SERVER['HTTP_REFERER'],0,-7).($home?$home:'index').'.html?payplug=ok';
 		$a['err'] = substr($_SERVER['HTTP_REFERER'],0,-7).($home?$home:'index').'.html?payplug=error';

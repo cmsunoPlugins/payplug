@@ -8,7 +8,8 @@ function f_save_payplug(){
 		var pass=document.getElementById("payplugPass").value;
 		var mod=document.getElementById("payplugMod").options[document.getElementById("payplugMod").selectedIndex].value;
 		var ext=(document.getElementById('payplugExt').checked?1:0);
-		jQuery.post('uno/plugins/payplug/payplug.php',{'action':'save','unox':Unox,'mail':mail,'pass':pass,'mod':mod,'ext':ext},function(r){
+		var off=(document.getElementById('ckpayplugoff').checked?1:0);
+		jQuery.post('uno/plugins/payplug/payplug.php',{'action':'save','unox':Unox,'mail':mail,'pass':pass,'mod':mod,'ext':ext,'ckpayplugoff':off},function(r){
 			f_alert(r);
 			document.getElementById("btSavePayplug").className='bouton fr';
 			if(pass.length>5&&mail.length>5)setTimeout(function(){location.reload();},1000);
@@ -26,6 +27,7 @@ function f_load_payplug(){
 				for(v=0;v<to.length;v++){if(to[v].value==r.mod){to[v].selected=true;v=to.length;}}
 			}
 			if(r.ext!=undefined&&r.ext)document.getElementById('payplugExt').checked=true;
+			if(r.ckpayplugoff!=undefined&&r.ckpayplugoff)document.getElementById('ckpayplugoff').checked=true;
 		}});
 	});
 }
