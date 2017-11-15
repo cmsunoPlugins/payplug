@@ -30,6 +30,11 @@ if (isset($_POST['action']))
 				<h3><?php echo T_("Default Settings");?> :</h3>
 				<table class="hForm">
 					<tr>
+						<td><label><?php echo T_("Activate");?></label></td>
+						<td><input type="checkbox" class="input" name="activ" id="activ" /></td>
+						<td><em><?php echo T_("Enable the payment with Payplug");?></em></td>
+					</tr>
+					<tr>
 						<td><label><?php echo T_("Account");?></label></td>
 						<td style="vertical-align:middle;padding:0 10px;">
 						<?php
@@ -84,11 +89,6 @@ if (isset($_POST['action']))
 						<td><input type="checkbox" name="ckpayplugoff" id="ckpayplugoff" /></td>
 						<td><em><?php echo T_("You don't want to use the CKEditor Payplug Button.");?></em></td>
 					</tr>
-					<tr>
-						<td><label><?php echo T_("External use");?></label></td>
-						<td><input type="checkbox" name="payplugExt" id="payplugExt" /></td>
-						<td><em><?php echo T_("Use Payplug from another plugin : complete system with cart or digital product.");?></em></td>
-					</tr>
 				</table>
 				<br />
 				<div id="btSavePayplug" class="bouton <?php if(!file_exists('../../data/_sdata-'.$sdata.'/_payplug/parameters.json')) echo 'danger '; ?>fr" onClick="f_save_payplug();" title="<?php echo T_("Save settings");?>"><?php echo T_("Save");?></div>
@@ -117,9 +117,16 @@ if (isset($_POST['action']))
 			$q = file_get_contents('../../data/_sdata-'.$sdata.'/payplug.json');
 			if($q) $a = json_decode($q,true);
 			}
+		$a['act'] = $_POST['act'];
+		if(file_exists('../../data/payment.json'))
+			{
+			$q = file_get_contents('../../data/payment.json'); $b = json_decode($q,true);
+			if(empty($b['method'])) $b['method'] = array();
+			$b['method']['payplug'] = $_POST['act'];
+			file_put_contents('../../data/payment.json',json_encode($b));
+			}
 		$a['mail'] = $_POST['mail'];
 		$a['mod'] = $_POST['mod'];
-		$a['ext'] = ($_POST['ext']?1:0);
 		$a['ckpayplugoff'] = ($_POST['ckpayplugoff']?1:0);
 		$a['url'] = substr($_SERVER['HTTP_REFERER'],0,-4).'/plugins/payplug/ipn.php';
 		$a['home'] = substr($_SERVER['HTTP_REFERER'],0,-7).($home?$home:'index').'.html?payplug=ok';

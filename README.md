@@ -32,6 +32,7 @@ Works also with digital goods and cart plugin.
 
 ### Versions ###
 
+* 1.3 - 15/11/2017 : Payment plugin Update
 * 1.2.3 - 20/05/2017 : Option to hide the CKEditor Payplug Button
 * 1.2.2 - 15/03/2017 : Fix issue when unknow lang
 * 1.2.1 - 13/03/2017 : Lib Payplug 1.1.2 - Use PHPMailer if Newsletter plugin exists - Replace MCrypt by OpenSSL

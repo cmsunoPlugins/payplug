@@ -6,7 +6,7 @@ if(file_exists(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/ssite.json'))
 	$mailAdmin = $b['mel'];
 	}
 else $mailAdmin = false;
-include dirname(__FILE__).'/../../template/mailTemplate.php';
+include(dirname(__FILE__).'/../../template/mailTemplate.php');
 $bottom = str_replace('[[unsubscribe]]','&nbsp;',$bottom);
 require_once(dirname(__FILE__).'/ckpayplug/lib/Payplug.php');
 Payplug::setConfigFromFile(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/_payplug/parameters.json');
@@ -143,24 +143,24 @@ function mailAdmin($tit, $msg, $bottom, $top, $url)
 		// PHPMailer
 		require_once(dirname(__FILE__).'/../newsletter/PHPMailer/PHPMailerAutoload.php');
 		$phm = new PHPMailer();
-		$phm->CharSet = "UTF-8";
+		$phm->CharSet = 'UTF-8';
 		$phm->setFrom($mailAdmin);
 		$phm->addReplyTo($mailAdmin);
-		$phm->AddAddress($mailAdmin);
+		$phm->addAddress($mailAdmin);
 		$phm->isHTML(true);
 		$phm->Subject = stripslashes($tit);
 		$phm->Body = stripslashes($msgH);		
 		$phm->AltBody = stripslashes($msgT);
-		if($phm->Send()) return true;
+		if($phm->send()) return true;
 		else return false;
 		}
 	else
 		{
 		$rn = "\r\n";
 		$boundary = "-----=".md5(rand());
-		$header  = "From: ".$mailAdmin."<".$mailAdmin.">".$rn."Reply-To:".$mailAdmin."<".$mailAdmin.">MIME-Version: 1.0".$rn."Content-Type: multipart/alternative;".$rn." boundary=\"$boundary\"".$rn;
-		$msg= $rn."--".$boundary.$rn."Content-Type: text/plain; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgT.$rn;
-		$msg.=$rn."--".$boundary.$rn."Content-Type: text/html; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgH.$rn.$rn."--".$boundary."--".$rn.$rn."--".$boundary."--".$rn;
+		$header = "From: ".$mailAdmin."<".$mailAdmin.">".$rn."Reply-To:".$mailAdmin."<".$mailAdmin.">MIME-Version: 1.0".$rn."Content-Type: multipart/alternative;".$rn." boundary=\"$boundary\"".$rn;
+		$msg = $rn."--".$boundary.$rn."Content-Type: text/plain; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgT.$rn;
+		$msg .= $rn."--".$boundary.$rn."Content-Type: text/html; charset=\"utf-8\"".$rn."Content-Transfer-Encoding: 8bit".$rn.$rn.$msgH.$rn.$rn."--".$boundary."--".$rn.$rn."--".$boundary."--".$rn;
 		$subject = mb_encode_mimeheader(stripslashes($tit),"UTF-8");
 		if(mail($mailAdmin, $subject, stripslashes($msg), $header)) return true;
 		else return false;
@@ -179,15 +179,15 @@ function mailUser($dest, $tit, $msg, $bottom, $top, $url=false)
 		// PHPMailer
 		require_once(dirname(__FILE__).'/../newsletter/PHPMailer/PHPMailerAutoload.php');
 		$phm = new PHPMailer();
-		$phm->CharSet = "UTF-8";
+		$phm->CharSet = 'UTF-8';
 		$phm->setFrom($mailAdmin);
 		$phm->addReplyTo($mailAdmin);
-		$phm->AddAddress($dest);
+		$phm->addAddress($dest);
 		$phm->isHTML(true);
 		$phm->Subject = stripslashes($tit);
 		$phm->Body = stripslashes($msgH);		
 		$phm->AltBody = stripslashes($msgT);
-		if($phm->Send()) return true;
+		if($phm->send()) return true;
 		else return false;
 		}
 	else

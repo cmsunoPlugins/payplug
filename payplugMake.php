@@ -7,7 +7,7 @@ if(file_exists('data/_sdata-'.$sdata.'/payplug.json'))
 	$q1 = file_get_contents('data/_sdata-'.$sdata.'/payplug.json');
 	$a1 = json_decode($q1,true);
 	$Uhead .= '<link rel="stylesheet" type="text/css" href="uno/plugins/payplug/ckpayplug/css/ckpayplugBtn0.css" />'."\r\n";
-	if($a1['ext'] && (strpos($Ucontent,'payplugCart(')!==false || strpos($Uhtml,'payplugCart(')!==false || strpos($Ufoot,'payplugCart(')!==false)) // paymentMake executed before payplugMake
+	if(!empty($a1['act']))
 		{
 		// JSON : {"prod":{"0":{"n":"clef de 12","p":8.5,"i":"","q":1},"1":{"n":"tournevis","p":1.5,"i":"","q":2},"2":{"n":"papier craft","p":0.21,"i":"","q":30}},"digital":"Ubusy|readme","ship":"4","name":"Sting","adre":"rue du lac 33234 PLOUG"}
 		// n=nom, p=prix, i=ID, q=quantite
