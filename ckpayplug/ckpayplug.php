@@ -7,7 +7,7 @@ if(isset($_POST['action']) && strip_tags($_POST['action'])=='url')
 		{
 		if(file_exists(strip_tags($_POST['par']).'/parameters.json'))
 			{
-			require_once(dirname(__FILE__).'/lib/Payplug.php');
+			require_once(dirname(__FILE__).'/libPayplug/lib/Payplug.php');
 			Payplug::setConfigFromFile(strip_tags($_POST['par']).'/parameters.json');
 			$paymentUrl = PaymentUrl::generateUrl(array(
 				'amount' => strip_tags($_POST['amo']),

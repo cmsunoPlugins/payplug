@@ -32,6 +32,7 @@ Works also with digital goods and cart plugin.
 
 ### Versions ###
 
+* 1.4 - 01/01/2021 : Payment new API V3.3
 * 1.3 - 15/11/2017 : Payment plugin Update
 * 1.2.3 - 20/05/2017 : Option to hide the CKEditor Payplug Button
 * 1.2.2 - 15/03/2017 : Fix issue when unknow lang

@@ -4,12 +4,28 @@ include('../../config.php');
 // ***** ACTION : URL *******************
 if(isset($_POST['action']) && strip_tags($_POST['action'])=='url')
 	{
-	if(isset($_POST['cur']) && isset($_POST['ipn']) && isset($_POST['oku']) && isset($_POST['eru']) && $_POST['cur'] && $_POST['ipn'])
+	if(!empty($_POST['cur']) && !empty($_POST['ipn']) && isset($_POST['oku']) && isset($_POST['eru']))
 		{
-		if(file_exists(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/_payplug/parameters.json'))
+		if(file_exists(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/payplug.json'))
 			{
-			require_once(dirname(__FILE__).'/ckpayplug/lib/Payplug.php');
-			Payplug::setConfigFromFile(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/_payplug/parameters.json');
+			$q = file_get_contents(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/payplug.json');
+			$k = json_decode($q,true);
+			if($k) $secretkey = (!empty($k['key'])?$k['key']:'');
+			// ****** T E S T ***************
+			$k['first_name'] = (!empty($_POST['fname'])?$_POST['fname']:'jean');
+			$k['last_name'] = (!empty($_POST['name'])?$_POST['name']:'valmond');
+			$k['email'] = (!empty($_POST['mail'])?$_POST['mail']:'jacques@boiteasite.fr');
+			$k['address1'] = '17 rue du lac';
+			$k['postcode'] = '75014';
+			$k['city'] = 'PARIS';
+			$k['country'] = 'FR';
+			$k['delivery_type'] = 'DIGITAL_GOODS';
+			// *****************************
+			}
+		if(!empty($secretkey))
+			{
+			require_once(dirname(__FILE__).'/ckpayplug/libPayplug/lib/init.php');
+			Payplug\Payplug::init(array('secretKey' => $secretkey));
 			$cart = ""; $amo = 0; $digit = "";
 			$a = json_decode(strip_tags(stripslashes($_POST['cart'])),true);
 			if(isset($a['prod'])) foreach($a['prod'] as $r)
@@ -31,15 +47,41 @@ if(isset($_POST['action']) && strip_tags($_POST['action'])=='url')
 				{
 				$cart .= 'ADRESS|'.$a['name'].'|'.$a['adre'].'|'.$a['mail'].'|'.$a['Ubusy'].'|;';
 				}
-			$paymentUrl = PaymentUrl::generateUrl(array(
+			$data = array(
 				'amount' => intVal($amo),
 				'currency' => strip_tags($_POST['cur']),
-				'ipnUrl' => strip_tags($_POST['ipn']),
-				'returnUrl' => strip_tags($_POST['oku']).($digit?'&digit='.urlencode($digit):''),
-				'cancelUrl' => strip_tags($_POST['eru']),
-				'customData' => $cart
-				));
-			echo $paymentUrl;
+				'billing' => array(
+					'first_name' => (!empty($k['first_name'])?$k['first_name']:'xxx'),
+					'last_name' => (!empty($k['last_name'])?$k['last_name']:'xyxxz'),
+					'email' => (!empty($a['mail'])?$a['mail']:(!empty($k['email'])?$k['email']:'xyxxz@example.com')),
+					'address1' => (!empty($a['adre'])?$a['adre']:(!empty($k['address1'])?$k['address1']:'17 rue du lac')),
+					'postcode' => (!empty($k['postcode'])?$k['postcode']:'75014'),
+					'city' => (!empty($k['city'])?$k['city']:'PARIS'),
+					'country' => (!empty($k['country'])?$k['country']:'FR'),
+				),
+				'shipping' => array(
+					'first_name' => (!empty($k['first_name'])?$k['first_name']:'xxx'),
+					'last_name' => (!empty($k['last_name'])?$k['last_name']:'xyxxz'),
+					'email' => (!empty($a['mail'])?$a['mail']:(!empty($k['email'])?$k['email']:'xyxxz@example.com')),
+					'address1' => (!empty($a['adre'])?$a['adre']:(!empty($k['address1'])?$k['address1']:'17 rue du lac')),
+					'postcode' => (!empty($k['postcode'])?$k['postcode']:'75014'),
+					'city' => (!empty($k['city'])?$k['city']:'PARIS'),
+					'country' => (!empty($k['country'])?$k['country']:'FR'),
+					'delivery_type' => (!empty($k['delivery_type'])?$k['delivery_type']:'DIGITAL_GOODS')
+				),
+				'notification_url' => strip_tags($_POST['ipn']),
+				'hosted_payment' => array(
+					'return_url' => strip_tags($_POST['oku']).($digit?'&digit='.urlencode($digit):''),
+					'cancel_url' => strip_tags($_POST['eru'])
+					),
+				'metadata' => array(
+					'customData' => $cart
+					)
+				);
+			$payment = \Payplug\Payment::create($data);
+			$payment_url = $payment->hosted_payment->payment_url;
+			$payment_id = $payment->id;
+			echo $payment_url;
 			}
 		else echo "setup";
 		}
@@ -82,6 +124,81 @@ order 	String 	Order ID provided when creating the payment URL.
 customData 	String 	Custom data provided when creating the payment URL.
 origin 	String 	Information about your website version (e.g., 'My Website 1.2 payplug_php0.9 PHP 5.3'), provided when creating the payment URL, with additional data sent by the library itself.
 isTest 	Boolean 	If value is true, the payment was done in Sandbox (TEST) mode.
+* 
+* ******************* API V2 - 2020 **********************
+* Example
+* {
+  "id": "pay_5iHMDxy4ABR4YBVW4UscIn",
+  "object": "payment",
+  "is_live": true,
+  "amount": 3300,
+  "amount_refunded": 0,
+  "authorization": null,
+  "currency": "EUR",
+  "created_at": 1434010787,
+  "installment_plan_id": null,
+  "is_paid": true,
+  "paid_at": 1555073519,
+  "is_refunded": false,
+  "is_3ds": false,
+  "save_card": false,
+  "card": {
+    "last4": "1800",
+    "country": "FR",
+    "exp_month": 9,
+    "exp_year": 2017,
+    "brand": "Mastercard",
+    "id": null
+  },
+  "billing": {
+    "title": "mr",
+    "first_name": "John",
+    "last_name": "Watson",
+    "email": "john.watson@example.net",
+    "mobile_phone_number": null,
+    "landline_phone_number": null,
+    "address1": "221B Baker Street",
+    "address2": null,
+    "postcode": "NW16XE",
+    "city": "London",
+    "state": null,
+    "country": "GB",
+    "language": "en"
+  },
+  "shipping": {
+    "title": "mr",
+    "first_name": "John",
+    "last_name": "Watson",
+    "email": "john.watson@example.net",
+    "mobile_phone_number": null,
+    "landline_phone_number": null,
+    "address1": "221B Baker Street",
+    "address2": null,
+    "postcode": "NW16XE",
+    "city": "London",
+    "state": null,
+    "country": "GB",
+    "language": "en",
+    "delivery_type": "BILLING"
+  },
+  "hosted_payment": {
+    "payment_url": "https://secure.payplug.com/pay/5iHMDxy4ABR4YBVW4UscIn",
+    "return_url": "https://example.net/success?id=42",
+    "cancel_url": "https://example.net/cancel?id=42",
+    "paid_at": 1434010827,
+    "sent_by": null
+  },
+  "notification": {
+    "url": "https://example.net/notifications?id=42",
+    "response_code": 200
+  },
+  "failure": null,
+  "description": null,
+  "metadata": {
+    "customer_id": 42
+  }
+}
+
 */
 
 ?>

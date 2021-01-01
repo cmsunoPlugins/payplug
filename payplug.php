@@ -35,34 +35,9 @@ if (isset($_POST['action']))
 						<td><em><?php echo T_("Enable the payment with Payplug");?></em></td>
 					</tr>
 					<tr>
-						<td><label><?php echo T_("Account");?></label></td>
-						<td style="vertical-align:middle;padding:0 10px;">
-						<?php
-						if(file_exists(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/_payplug/parameters.json')) echo '<span style="color:green;font-weight:700">OK</span>';
-						else echo '<span style="color:red;font-weight:700">'.T_("No account.").'</span>';
-						?>
-						</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td><label><?php echo T_("Account Email");?></label></td>
-						<td><input type="text" class="input" name="payplugMail" id="payplugMail" style="width:150px;" /></td>
-						<td><em><?php echo T_("Email address for the Payplug account.");?></em></td>
-					</tr>
-					<tr>
-						<td><label><?php echo T_("Account Password");?></label></td>
-						<td><input type="password" class="input" name="payplugPass" id="payplugPass" style="width:150px;" /></td>
-						<td><em><?php echo T_("Password for the Payplug account. Encrypted record with payplug key.");?></em></td>
-					</tr>
-					<tr>
-						<td><label><?php echo T_("Mode");?></label></td>
-						<td>
-							<select name="payplugMod" id="payplugMod">
-								<option value="prod"><?php echo T_("Production");?></option>
-								<option value="test"><?php echo T_("Test (sandbox)");?></option>
-							</select>
-						</td>
-						<td><em><?php echo T_("Production = Real payment ; Test = Factice to test account.");?></em></td>
+						<td><label><?php echo T_("Secret Key");?></label></td>
+						<td><input type="text" class="input" name="payplugKey" id="payplugKey" style="width:150px;" /></td>
+						<td><em><?php echo T_("LIVE and TEST using the same endpoint. To switch, you have 2 differents keys.");?></em></td>
 					</tr>
 					<tr>
 						<td><label><?php echo T_("Notify URL");?></label></td>
@@ -122,23 +97,16 @@ if (isset($_POST['action']))
 			{
 			$q = file_get_contents('../../data/payment.json'); $b = json_decode($q,true);
 			if(empty($b['method'])) $b['method'] = array();
-			$b['method']['payplug'] = $_POST['act'];
+			$b['method']['payplug'] = strip_tags($_POST['act']);
 			file_put_contents('../../data/payment.json',json_encode($b));
 			}
-		$a['mail'] = $_POST['mail'];
-		$a['mod'] = $_POST['mod'];
+		$a['key'] = $_POST['key'];
 		$a['ckpayplugoff'] = ($_POST['ckpayplugoff']?1:0);
 		$a['url'] = substr($_SERVER['HTTP_REFERER'],0,-4).'/plugins/payplug/ipn.php';
 		$a['home'] = substr($_SERVER['HTTP_REFERER'],0,-7).($home?$home:'index').'.html?payplug=ok';
 		$a['err'] = substr($_SERVER['HTTP_REFERER'],0,-7).($home?$home:'index').'.html?payplug=error';
 		$a['par'] = '../../../data/_sdata-'.$sdata.'/_payplug';
 		$out = json_encode($a);
-		if(strlen($_POST['pass'])>5)
-			{
-			require_once(dirname(__FILE__).'/ckpayplug/lib/Payplug.php');
-			$parameters = Payplug::loadParameters($_POST['mail'], $_POST['pass'], (($a['mod']=='test')?true:false)); // TRUE = SANDBOX - FALSE = REAL
-			$parameters->saveInFile(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/_payplug/parameters.json');
-			}
 		if(file_put_contents('../../data/_sdata-'.$sdata.'/payplug.json', $out)) echo T_('Setup OK');
 		else echo '!'.T_('Impossible setup');
 		break;
@@ -151,7 +119,7 @@ if (isset($_POST['action']))
 				#payplugVente table td{text-align:left;padding:2px 6px;vertical-align:middle;color:#0b4a6a;}
 				#payplugVente table tr.PayplugTreatedYes td{color:green;}
 				#payplugVente table td.yesno{text-decoration:underline;cursor:pointer;}
-				#payplugVente .payplugArchiv{width:16px;height:16px;margin:0 auto;background-position:-112px -96px;cursor:pointer;background-image:url("'.$_POST['udep'].'includes/img/ui-icons_444444_256x240.png")}
+				#payplugVente .payplugArchiv{width:16px;height:16px;margin:0 auto;background-position:-112px -96px;cursor:pointer;background-image:url("'.strip_tags($_POST['udep']).'includes/img/ui-icons_444444_256x240.png")}
 			</style>';
 		$tab = array(); $d = '../../data/_sdata-'.$sdata.'/_payplug/';
 		if($dh=opendir($d))
@@ -176,6 +144,7 @@ if (isset($_POST['action']))
 				{
 				if($r)
 					{
+					$idt = ($r['idTransaction']?$r['idTransaction']:($r['id']?$r['id']:''));
 					$item = ''; $typ = 'Pay';
 					$it = explode("|;", $r['customData']);
 					if($it)
@@ -193,16 +162,16 @@ if (isset($_POST['action']))
 							}
 						}
 					echo '<tr'.($r['treated']?' class="PayplugTreatedYes"':'').'>';
-					echo '<td>'.(isset($r['time'])?date("dMy H:i", $r['time']):'').'<br /><span style="font-size:.8em;text-decoration:underline;cursor:pointer;" onClick="f_payplugDetail(\''.$r['idTransaction'].'\')">'.$r['idTransaction'].'</span></td>';
+					echo '<td>'.(isset($r['time'])?date("dMy H:i", $r['time']):'').'<br /><span style="font-size:.8em;text-decoration:underline;cursor:pointer;" onClick="f_payplugDetail(\''.$idt.'\')">'.$idt.'</span></td>';
 					echo '<td style="text-align:center">'.$typ.'</td>';
 					echo '<td>'.$r['firstName'].'&nbsp;'.$r['lastName'].'<br />'.$r['email'].'</td>';
 					echo '<td style="text-align:center">'.'/'.'</td>'; // Added later
 					echo '<td>'.$item.'</td>';
 					echo '<td>'.(intval($r['amount'])/100).' Eur</td>';
-					echo '<td style="text-align:center;" '.(!$r['treated']?'onClick="f_treated_payplug(this,\''.$r['idTransaction'].'\',\''.T_("Yes").'\')"':'').($r['treated']?'>'.T_("Yes"):' class="yesno">'.T_("No")).'</td>';
-					if(isset($r['isTest']) && $r['isTest']==true) echo '<td width="30px" style="cursor:pointer;background:transparent url(\''.$_POST['udep'].'includes/img/close.png\') no-repeat scroll center center;" onClick="f_supp_payplug(this,\''.$r['idTransaction'].'\')">&nbsp;</td>';
+					echo '<td style="text-align:center;" '.(!$r['treated']?'onClick="f_treated_payplug(this,\''.$idt.'\',\''.T_("Yes").'\')"':'').($r['treated']?'>'.T_("Yes"):' class="yesno">'.T_("No")).'</td>';
+					if(isset($r['isLive']) && $r['isLive']==0) echo '<td width="30px" style="cursor:pointer;background:transparent url(\''.strip_tags($_POST['udep']).'includes/img/close.png\') no-repeat scroll center center;" onClick="f_supp_payplug(this,\''.$idt.'\')">&nbsp;</td>';
 					else echo '<td></td>';
-					echo '<td><div class="payplugArchiv" onClick="f_archivOrderPayplug(\''.$r['idTransaction'].'\',\''.T_("Are you sure ?").'\')"></div></td>';
+					echo '<td><div class="payplugArchiv" onClick="f_archivOrderPayplug(\''.$idt.'\',\''.T_("Are you sure ?").'\')"></div></td>';
 					echo '</tr>';
 					}
 				}
@@ -211,15 +180,15 @@ if (isset($_POST['action']))
 		break;
 		// ********************************************************************************************
 		case 'treated':
-		if(file_exists('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['id'].'.json'))
+		if(file_exists('../../data/_sdata-'.$sdata.'/_payplug/'.strip_tags($_POST['id']).'.json'))
 			{
-			$q = file_get_contents('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['id'].'.json');
+			$q = file_get_contents('../../data/_sdata-'.$sdata.'/_payplug/'.strip_tags($_POST['id']).'.json');
 			if($q)
 				{
 				$a = json_decode($q,true);
 				$a['treated'] = 1;
 				$out = json_encode($a);
-				if(file_put_contents('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['id'].'.json', $out)) echo T_('Treated');
+				if(file_put_contents('../../data/_sdata-'.$sdata.'/_payplug/'.strip_tags($_POST['id']).'.json', $out)) echo T_('Treated');
 				exit;
 				}
 			}
@@ -238,7 +207,7 @@ if (isset($_POST['action']))
 		case 'archiv':
 		$p = '../../data/_sdata-'.$sdata.'/_payplug/archive';
 		if(!is_dir($p)) mkdir($p,0711);
-		$d = $_POST['id'].'.json';
+		$d = strip_tags($_POST['id']).'.json';
 		$q = file_get_contents('../../data/_sdata-'.$sdata.'/_payplug/'.$d);
 		if($q) $a = json_decode($q,true);
 		else $a = array();
@@ -294,21 +263,21 @@ if (isset($_POST['action']))
 		case 'viewA':
 		if(isset($_POST['arch']) && file_exists('../../data/_sdata-'.$sdata.'/_payplug/archive/'.$_POST['arch']))
 			{
-			$q = @file_get_contents('../../data/_sdata-'.$sdata.'/_payplug/archive/'.$_POST['arch']);
+			$q = @file_get_contents('../../data/_sdata-'.$sdata.'/_payplug/archive/'.strip_tags($_POST['arch']));
 			$a = json_decode($q,true); $o = '<h3>'.T_('Archives').'</h3><table class="payplugTO">';
 			foreach($a as $k=>$v)
 				{
 				if($k=='time') $v .= ' => '.date("d/m/Y H:i",$v);
 				$o .= '<tr><td>'.$k.'</td><td>'.(is_array($v)?json_encode($v):$v).'</td></tr>';
 				}
-			echo $o.'</table><div class="bouton fr" onClick="f_payplugRestaurOrder(\''.$_POST['arch'].'\');" title="'.T_("Restore").'">'.T_("Restore").'</div><div style="clear:both;"></div>';
+			echo $o.'</table><div class="bouton fr" onClick="f_payplugRestaurOrder(\''.strip_tags($_POST['arch']).'\');" title="'.T_("Restore").'">'.T_("Restore").'</div><div style="clear:both;"></div>';
 			}
 		break;
 		// ********************************************************************************************
 		case 'detail':
-		if(isset($_POST['id']) && file_exists('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['id'].'.json'))
+		if(isset($_POST['id']) && file_exists('../../data/_sdata-'.$sdata.'/_payplug/'.strip_tags($_POST['id']).'.json'))
 			{
-			$q = @file_get_contents('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['id'].'.json');
+			$q = @file_get_contents('../../data/_sdata-'.$sdata.'/_payplug/'.strip_tags($_POST['id']).'.json');
 			$a = json_decode($q,true); $o = '<h3>'.T_('Payment Details').'</h3><table class="payplugTO">';
 			foreach($a as $k=>$v)
 				{
@@ -316,7 +285,7 @@ if (isset($_POST['action']))
 				$o .= '<tr><td>'.$k.'</td><td>'.(is_array($v)?json_encode($v):$v).'</td></tr>';
 				}
 			$o .= '</table>';
-			$o .= '<div class="bouton fr" '.((isset($a['treated']) && $a['treated']==0)?'style="display:none;"':'').' onClick="f_archivOrderPayplug(\''.$_POST['id'].'\',\''.T_("Are you sure ?").'\')" title="">'.T_("Archive").'</div>';
+			$o .= '<div class="bouton fr" '.((isset($a['treated']) && $a['treated']==0)?'style="display:none;"':'').' onClick="f_archivOrderPayplug(\''.strip_tags($_POST['id']).'\',\''.T_("Are you sure ?").'\')" title="">'.T_("Archive").'</div>';
 			$o .= '<div style="clear:both;"></div>';
 			echo $o;
 			}

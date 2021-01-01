@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CmsUno\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-15 10:25+0100\n"
-"PO-Revision-Date: 2017-11-15 10:26+0100\n"
-"Last-Translator: jacques Malgrange <contacter@boiteasite.fr>\n"
+"POT-Creation-Date: 2020-06-17 19:37+0200\n"
+"PO-Revision-Date: 2020-06-17 19:37+0200\n"
+"Last-Translator: malgrange <jacques.malgrange@gmail.com>\n"
 "Language-Team: Jacques Malgrange <contacter@boiteasite.fr>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
@@ -15,50 +15,53 @@ msgstr ""
 "X-Poedit-KeywordsList: _;T_\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
-#: ../../../ipn.php:50
+msgid "Fields are mandatory"
+msgstr "Los campos son obligatorios"
+
+#: ../../../ipn.php:62
 msgid "Thank you for your trust, see you soon!"
 msgstr "Gracias por su confianza, nos vemos pronto!"
 
-#: ../../../ipn.php:81 ../../../ipn.php:108
+#: ../../../ipn.php:93 ../../../ipn.php:120
 msgid "Payment receipt"
 msgstr "Pago recibido"
 
-#: ../../../ipn.php:82
+#: ../../../ipn.php:94
 msgid "Total"
 msgstr "Total"
 
-#: ../../../ipn.php:84
+#: ../../../ipn.php:96
 msgid "Paid by Payplug"
 msgstr "A cargo Payplug"
 
-#: ../../../ipn.php:84 ../../../payplug.php:165
+#: ../../../ipn.php:96 ../../../payplug.php:165 ../../../payplugMake.php:18
 msgid "Name"
 msgstr "Nombre"
 
-#: ../../../ipn.php:84 ../../../payplug.php:165
+#: ../../../ipn.php:96 ../../../payplug.php:165
 msgid "Address"
 msgstr "Dirección"
 
-#: ../../../ipn.php:84
+#: ../../../ipn.php:96 ../../../payplugMake.php:19
 msgid "Mail"
 msgstr "Mail"
 
-#: ../../../ipn.php:88
+#: ../../../ipn.php:100
 msgid "New order by Payplug"
 msgstr "Nuevo orden por Payplug"
 
-#: ../../../ipn.php:92
+#: ../../../ipn.php:104
 msgid "Follow the evolution of your order"
 msgstr "Siga la evolución de su orden"
 
-#: ../../../ipn.php:93
+#: ../../../ipn.php:105
 msgid "Thank you for your trust."
 msgstr "Gracias por tu confianza."
 
-#: ../../../ipn.php:94
+#: ../../../ipn.php:106
 msgid "Order"
 msgstr "Orden"
 
@@ -82,7 +85,7 @@ msgstr "Lista de ventas"
 msgid "Sales"
 msgstr "Ventas"
 
-#: ../../../payplug.php:23 ../../../payplug.php:312
+#: ../../../payplug.php:23 ../../../payplug.php:312 ../../../payplugMake.php:17
 msgid "Payment Details"
 msgstr "Detalles del pago"
 
@@ -275,7 +278,11 @@ msgstr "Restaurar"
 msgid "Removed"
 msgstr "Borrado"
 
-#: ../../../payplugMake.php:25
+#: ../../../payplugMake.php:21
+msgid "Pay"
+msgstr "Paga"
+
+#: ../../../payplugMake.php:48
 msgid "Thank you for your payment"
 msgstr "Gracias por su pago"
 
