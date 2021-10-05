@@ -2,51 +2,33 @@
 if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])!='xmlhttprequest') {sleep(2);exit;} // ajax request
 include('../../config.php');
 // ***** ACTION : URL *******************
-if(isset($_POST['action']) && strip_tags($_POST['action'])=='url')
-	{
-	if(!empty($_POST['cur']) && !empty($_POST['ipn']) && isset($_POST['oku']) && isset($_POST['eru']))
-		{
-		if(file_exists(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/payplug.json'))
-			{
+if(isset($_POST['action']) && strip_tags($_POST['action'])=='url') {
+	if(!empty($_POST['cur']) && !empty($_POST['ipn']) && isset($_POST['oku']) && isset($_POST['eru'])) {
+		if(file_exists(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/payplug.json')) {
 			$q = file_get_contents(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/payplug.json');
 			$k = json_decode($q,true);
 			if($k) $secretkey = (!empty($k['key'])?$k['key']:'');
-			// ****** T E S T ***************
-			$k['first_name'] = (!empty($_POST['fname'])?$_POST['fname']:'jean');
-			$k['last_name'] = (!empty($_POST['name'])?$_POST['name']:'valmond');
-			$k['email'] = (!empty($_POST['mail'])?$_POST['mail']:'jacques@boiteasite.fr');
-			$k['address1'] = '17 rue du lac';
-			$k['postcode'] = '75014';
-			$k['city'] = 'PARIS';
-			$k['country'] = 'FR';
-			$k['delivery_type'] = 'DIGITAL_GOODS';
-			// *****************************
-			}
-		if(!empty($secretkey))
-			{
+		}
+		if(!empty($secretkey)) {
 			require_once(dirname(__FILE__).'/ckpayplug/libPayplug/lib/init.php');
 			Payplug\Payplug::init(array('secretKey' => $secretkey));
 			$cart = ""; $amo = 0; $digit = "";
 			$a = json_decode(strip_tags(stripslashes($_POST['cart'])),true);
-			if(isset($a['prod'])) foreach($a['prod'] as $r)
-				{
+			if(isset($a['prod'])) foreach($a['prod'] as $r) {
 				$cart .= (isset($r['n'])?$r['n']:'').'|'.(isset($r['p'])?$r['p']:'0').'|'.(isset($r['i'])?$r['i']:'').'|'.(isset($r['q'])?$r['q']:'1').'|;';
 				$amo += (floatval((isset($r['p'])?$r['p']:'0')) * 100 * (isset($r['q'])?$r['q']:'1'));
-				}
-			if(isset($a['ship']) && $a['ship'])
-				{
+			}
+			if(isset($a['ship']) && $a['ship']) {
 				$cart .= 'Shipping cost|'.$a['ship'].'||1|;';
 				$amo += floatval($a['ship'])*100; // Shipping Cost
-				}
-			if(isset($a['digital']) && isset($_POST['rand']))
-				{
+			}
+			if(isset($a['digital']) && isset($_POST['rand'])) {
 				$digit =  $a['digital'].'|'.$_POST['rand']; // JSON cart with digital ** "digital":"Ubusy|readme" ** - rand : rand JS Key
 				$cart .= 'DIGITAL|'.$digit.'|;';
-				}
-			else if(isset($a['name']) && isset($a['adre']) && isset($a['mail']))
-				{
+			}
+			else if(isset($a['name']) && isset($a['adre']) && isset($a['mail'])) {
 				$cart .= 'ADRESS|'.$a['name'].'|'.$a['adre'].'|'.$a['mail'].'|'.$a['Ubusy'].'|;';
-				}
+			}
 			$data = array(
 				'amount' => intVal($amo),
 				'currency' => strip_tags($_POST['cur']),
@@ -82,11 +64,11 @@ if(isset($_POST['action']) && strip_tags($_POST['action'])=='url')
 			$payment_url = $payment->hosted_payment->payment_url;
 			$payment_id = $payment->id;
 			echo $payment_url;
-			}
-		else echo "setup";
 		}
-	else echo "incomplete";
+		else echo "setup";
 	}
+	else echo "incomplete";
+}
 // ***************************************
 else echo "incomplete";
 exit();

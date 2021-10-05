@@ -7,7 +7,8 @@ function f_save_payplug(){
 		var act=document.getElementById('activ').checked?1:0;
 		var key=document.getElementById("payplugKey").value;
 		var off=(document.getElementById('ckpayplugoff').checked?1:0);
-		jQuery.post('uno/plugins/payplug/payplug.php',{'action':'save','unox':Unox,'act':act,'key':key,'ckpayplugoff':off},function(r){
+		var lng=document.getElementById("langPayplug").options[document.getElementById("langPayplug").selectedIndex].value;
+		jQuery.post('uno/plugins/payplug/payplug.php',{'action':'save','unox':Unox,'act':act,'key':key,'ckpayplugoff':off,'lng':lng},function(r){
 			f_alert(r);
 			document.getElementById("btSavePayplug").className='bouton fr';
 			if(pass.length>5&&mail.length>5)setTimeout(function(){location.reload();},1000);
@@ -19,7 +20,7 @@ function f_load_payplug(){
 		jQuery.ajax({type:'POST',url:'uno/plugins/payplug/payplug.php',data:{'action':'load','unox':Unox},dataType:'json',async:true,success:function(r){
 			if(r.act!=undefined&&r.act==1)document.getElementById('activ').checked=true;else document.getElementById('activ').checked=false;
 			if(r.key!=undefined)document.getElementById('payplugKey').value=r.key;
-			if(r.ckpayplugoff!=undefined&&r.ckpayplugoff)document.getElementById('ckpayplugoff').checked=true;
+			if(r.lng!=undefined&&r.lng)jQuery('#langPayplug option[value="'+r.lng+'"]').prop('selected',true);
 		}});
 	});
 }

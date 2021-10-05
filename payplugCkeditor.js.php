@@ -7,11 +7,10 @@ UconfigNum++;
 
 <?php $a = 0;
 include(dirname(__FILE__).'/../../config.php'); // $sdata
-if(file_exists(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/payplug.json'))
-	{
+if(file_exists(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/payplug.json')) {
 	$q = file_get_contents(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/payplug.json');
 	$a = json_decode($q,true);
-	}
+}
 if(empty($a['ckpayplugoff'])) { ?>
 
 jQuery(document).ready(function(){

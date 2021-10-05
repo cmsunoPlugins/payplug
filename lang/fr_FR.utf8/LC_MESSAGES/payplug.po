@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CmsUno\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-17 19:37+0200\n"
-"PO-Revision-Date: 2020-06-17 19:37+0200\n"
+"POT-Creation-Date: 2021-10-05 10:55+0200\n"
+"PO-Revision-Date: 2021-10-05 10:56+0200\n"
 "Last-Translator: malgrange <jacques.malgrange@gmail.com>\n"
 "Language-Team: Jacques Malgrange <contacter@boiteasite.fr>\n"
 "Language: fr_FR\n"
@@ -18,280 +18,311 @@ msgstr ""
 "X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
-msgid "Fields are mandatory"
-msgstr "Les champs sont obligatoires"
-
-#: ../../../ipn.php:62
+#: ../../../ipn.php:73
 msgid "Thank you for your trust, see you soon!"
 msgstr "Merci pour votre confiance, à bientôt !"
 
-#: ../../../ipn.php:93 ../../../ipn.php:120
+#: ../../../ipn.php:101 ../../../ipn.php:126
 msgid "Payment receipt"
 msgstr "Réception d'un paiement"
 
-#: ../../../ipn.php:94
+#: ../../../ipn.php:102
 msgid "Total"
 msgstr "Total"
 
-#: ../../../ipn.php:96
+#: ../../../ipn.php:104
 msgid "Paid by Payplug"
 msgstr "Payé par Payplug"
 
-#: ../../../ipn.php:96 ../../../payplug.php:165 ../../../payplugMake.php:18
+#: ../../../ipn.php:104 ../../../payplug.php:139 ../../../payplugMake.php:20
 msgid "Name"
 msgstr "Nom"
 
-#: ../../../ipn.php:96 ../../../payplug.php:165
+#: ../../../ipn.php:104 ../../../payplug.php:139
 msgid "Address"
 msgstr "Adresse"
 
-#: ../../../ipn.php:96 ../../../payplugMake.php:19
+#: ../../../ipn.php:104 ../../../payplugMake.php:21
 msgid "Mail"
 msgstr "Mail"
 
-#: ../../../ipn.php:100
+#: ../../../ipn.php:107
 msgid "New order by Payplug"
 msgstr "Nouvelle commande avec Payplug"
 
-#: ../../../ipn.php:104
+#: ../../../ipn.php:111
 msgid "Follow the evolution of your order"
 msgstr "Suivre l'évolution de votre commande"
 
-#: ../../../ipn.php:105
+#: ../../../ipn.php:112
 msgid "Thank you for your trust."
 msgstr "Merci pour votre confiance."
 
-#: ../../../ipn.php:106
+#: ../../../ipn.php:113
 msgid "Order"
 msgstr "Commande"
 
-#: ../../../payplug.php:20 ../../../payplug.php:298
+#: ../../../payplug.php:18 ../../../payplug.php:255
 msgid "Archives"
 msgstr "Archives"
 
-#: ../../../payplug.php:21
+#: ../../../payplug.php:19
 msgid "Configure Payplug plugin"
 msgstr "Configurer le plugin Payplug"
 
-#: ../../../payplug.php:21
+#: ../../../payplug.php:19
 msgid "Config"
 msgstr "Configuration"
 
-#: ../../../payplug.php:22
+#: ../../../payplug.php:20
 msgid "Sales list"
 msgstr "Liste des ventes"
 
-#: ../../../payplug.php:22
+#: ../../../payplug.php:20
 msgid "Sales"
 msgstr "Ventes"
 
-#: ../../../payplug.php:23 ../../../payplug.php:312 ../../../payplugMake.php:17
+#: ../../../payplug.php:21 ../../../payplug.php:267 ../../../payplugMake.php:18
 msgid "Payment Details"
 msgstr "Détails du paiement"
 
-#: ../../../payplug.php:24
+#: ../../../payplug.php:22
 msgid "Payplug"
 msgstr "Payplug"
 
-#: ../../../payplug.php:27
+#: ../../../payplug.php:25
 msgid ""
 "This plugin allows you to add different Payplug buttons in your website."
 msgstr "Ce plugin permet d'ajouter différents boutons Payplug sur votre site."
 
-#: ../../../payplug.php:28
+#: ../../../payplug.php:26
 msgid "It is used with the button"
 msgstr "Il s'utilise avec le bouton"
 
-#: ../../../payplug.php:28
+#: ../../../payplug.php:26
 msgid "added to the text editor when the plugin is enabled."
 msgstr "ajouté à l'éditeur de texte lorsque le plugin est actif."
 
-#: ../../../payplug.php:29
+#: ../../../payplug.php:27
 msgid "Create your account on"
 msgstr "Créer votre compte sur"
 
-#: ../../../payplug.php:30
+#: ../../../payplug.php:28
 msgid "Default Settings"
 msgstr "Réglages par défaut"
 
-#: ../../../payplug.php:33
+#: ../../../payplug.php:31
 msgid "Activate"
 msgstr "Activer"
 
-#: ../../../payplug.php:35
+#: ../../../payplug.php:33
 msgid "Enable the payment with Payplug"
 msgstr "Activer le paiement avec Payplug"
 
+#: ../../../payplug.php:36
+msgid "Secret Key"
+msgstr "Clef secrète"
+
 #: ../../../payplug.php:38
-msgid "Account"
-msgstr "Compte"
-
-#: ../../../payplug.php:42
-msgid "No account."
-msgstr "Pas de compte."
-
-#: ../../../payplug.php:48
-msgid "Account Email"
-msgstr "E-mail du compte"
-
-#: ../../../payplug.php:50
-msgid "Email address for the Payplug account."
-msgstr "Adresse e-mail pour ce compte Payplug"
-
-#: ../../../payplug.php:53
-msgid "Account Password"
-msgstr "Mot de passe du compte"
-
-#: ../../../payplug.php:55
-msgid "Password for the Payplug account. Encrypted record with payplug key."
+msgid ""
+"LIVE and TEST use the same endpoint. To switch, you have 2 different keys."
 msgstr ""
-"Mot de passe pour le compte Payplug. Il sera crypté avec une clef Payplug "
-"avant d'être sauvegardé."
+"LIVE et TEST utilisent le même point de terminaison. Pour basculer, vous "
+"disposez de 2 clés différentes."
 
-#: ../../../payplug.php:58
-msgid "Mode"
-msgstr "Mode"
-
-#: ../../../payplug.php:61
-msgid "Production"
-msgstr "Production"
-
-#: ../../../payplug.php:62
-msgid "Test (sandbox)"
-msgstr "Test (Sandbox)"
-
-#: ../../../payplug.php:65
-msgid "Production = Real payment ; Test = Factice to test account."
-msgstr ""
-"Production = Paiements réels ; Test = Paiement fictifs avec un compte de test"
-
-#: ../../../payplug.php:68
+#: ../../../payplug.php:41
 msgid "Notify URL"
 msgstr "URL de notification"
 
-#: ../../../payplug.php:70
+#: ../../../payplug.php:43
 msgid "Local File for Payplug Instant Payment Notification (IPN)"
 msgstr ""
 "Fichier local pour la notification instantannée de paiement par Payplug (IPN)"
 
-#: ../../../payplug.php:73
+#: ../../../payplug.php:46
 msgid "Return URL"
 msgstr "URL de retour"
 
-#: ../../../payplug.php:76
+#: ../../../payplug.php:49
 msgid "Return URL after success payment. (This is the active page)"
 msgstr "Adresse web de retour en cas de succès. (Page actuellement active)"
 
-#: ../../../payplug.php:79
+#: ../../../payplug.php:52
 msgid "Failure URL"
 msgstr "URL d'échec"
 
-#: ../../../payplug.php:81
+#: ../../../payplug.php:54
 msgid "Return URL after error in payment. (This is the active page)"
 msgstr "Adresse web de retour en cas d'échec. (Page actuellement active)"
 
-#: ../../../payplug.php:85
+#: ../../../payplug.php:58
 msgid "Options :"
 msgstr "Options :"
 
-#: ../../../payplug.php:88
+#: ../../../payplug.php:61
 msgid "No Payplug button"
 msgstr "Pas de bouton Payplug"
 
-#: ../../../payplug.php:90
+#: ../../../payplug.php:63
 msgid "You don't want to use the CKEditor Payplug Button."
 msgstr ""
 "Vous ne voulez pas utiliser Payplug avec CKEditor. Le bouton ne sera pas "
 "chargé."
 
-#: ../../../payplug.php:94
+#: ../../../payplug.php:66
+msgid "Lang"
+msgstr "Langue"
+
+#: ../../../payplug.php:69
+msgid "Current language"
+msgstr "Langage courant"
+
+#: ../../../payplug.php:70
+msgid "English"
+msgstr "Anglais"
+
+#: ../../../payplug.php:71
+msgid "French"
+msgstr "Français"
+
+#: ../../../payplug.php:72
+msgid "Spanish"
+msgstr "Espagnol"
+
+#: ../../../payplug.php:75
+msgid "Select the language to use in the form."
+msgstr "Sélectionnez la langue à utiliser dans le formulaire."
+
+#: ../../../payplug.php:79
 msgid "Save settings"
 msgstr "Sauvegarde des paramètres"
 
-#: ../../../payplug.php:94
+#: ../../../payplug.php:79
 msgid "Save"
 msgstr "Sauvegarde"
 
-#: ../../../payplug.php:142
+#: ../../../payplug.php:118
 msgid "Setup OK"
 msgstr "Configuration OK"
 
-#: ../../../payplug.php:143
+#: ../../../payplug.php:119
 msgid "Impossible setup"
 msgstr "Configuration impossible"
 
-#: ../../../payplug.php:147
+#: ../../../payplug.php:123
 msgid "List of the Payplug payments"
 msgstr "Liste des paiements Payplug"
 
-#: ../../../payplug.php:165
+#: ../../../payplug.php:139
 msgid "Date"
 msgstr "Date"
 
-#: ../../../payplug.php:165
+#: ../../../payplug.php:139
 msgid "Type"
 msgstr "Type"
 
-#: ../../../payplug.php:165
+#: ../../../payplug.php:139
 msgid "Article"
 msgstr "Article"
 
-#: ../../../payplug.php:165
+#: ../../../payplug.php:139
 msgid "Price"
 msgstr "Prix"
 
-#: ../../../payplug.php:165 ../../../payplug.php:222
+#: ../../../payplug.php:139 ../../../payplug.php:189
 msgid "Treated"
 msgstr "Traité"
 
-#: ../../../payplug.php:165
+#: ../../../payplug.php:139
 msgid "Del"
 msgstr "Supp"
 
-#: ../../../payplug.php:165 ../../../payplug.php:319
+#: ../../../payplug.php:139 ../../../payplug.php:273
 msgid "Archive"
 msgstr "Archiver"
 
-#: ../../../payplug.php:202
+#: ../../../payplug.php:171
 msgid "Yes"
 msgstr "Oui"
 
-#: ../../../payplug.php:202
+#: ../../../payplug.php:171
 msgid "No"
 msgstr "Non"
 
-#: ../../../payplug.php:205 ../../../payplug.php:319
+#: ../../../payplug.php:174 ../../../payplug.php:273
 msgid "Are you sure ?"
 msgstr "Etes-vous certain ?"
 
-#: ../../../payplug.php:226 ../../../payplug.php:235 ../../../payplug.php:251
-#: ../../../payplug.php:323 ../../../payplug.php:332
+#: ../../../payplug.php:193 ../../../payplug.php:202 ../../../payplug.php:217
+#: ../../../payplug.php:277 ../../../payplug.php:285
 msgid "Error"
 msgstr "Erreur"
 
-#: ../../../payplug.php:234
+#: ../../../payplug.php:201
 msgid "Restored"
 msgstr "Restauré"
 
-#: ../../../payplug.php:250
+#: ../../../payplug.php:216
 msgid "Archived"
 msgstr "Archivé"
 
-#: ../../../payplug.php:304
+#: ../../../payplug.php:260
 msgid "Restore"
 msgstr "Restaurer"
 
-#: ../../../payplug.php:330
+#: ../../../payplug.php:283
 msgid "Removed"
 msgstr "Supprimé"
 
-#: ../../../payplugMake.php:21
+#: ../../../payplugMake.php:19
+msgid "First Name"
+msgstr "Prénom"
+
+#: ../../../payplugMake.php:23
 msgid "Pay"
 msgstr "Payer"
+
+#: ../../../payplugMake.php:31
+msgid "Fields are mandatory"
+msgstr "Les champs sont obligatoires"
 
 #: ../../../payplugMake.php:48
 msgid "Thank you for your payment"
 msgstr "Merci pour votre paiement"
+
+#~ msgid "Account"
+#~ msgstr "Compte"
+
+#~ msgid "No account."
+#~ msgstr "Pas de compte."
+
+#~ msgid "Account Email"
+#~ msgstr "E-mail du compte"
+
+#~ msgid "Email address for the Payplug account."
+#~ msgstr "Adresse e-mail pour ce compte Payplug"
+
+#~ msgid "Account Password"
+#~ msgstr "Mot de passe du compte"
+
+#~ msgid "Password for the Payplug account. Encrypted record with payplug key."
+#~ msgstr ""
+#~ "Mot de passe pour le compte Payplug. Il sera crypté avec une clef Payplug "
+#~ "avant d'être sauvegardé."
+
+#~ msgid "Mode"
+#~ msgstr "Mode"
+
+#~ msgid "Production"
+#~ msgstr "Production"
+
+#~ msgid "Test (sandbox)"
+#~ msgstr "Test (Sandbox)"
+
+#~ msgid "Production = Real payment ; Test = Factice to test account."
+#~ msgstr ""
+#~ "Production = Paiements réels ; Test = Paiement fictifs avec un compte de "
+#~ "test"
 
 #~ msgid "External use"
 #~ msgstr "Usage externe"

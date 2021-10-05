@@ -1,14 +1,15 @@
 <?php
-if (!isset($_SESSION['cmsuno'])) exit();
+if(!isset($_SESSION['cmsuno'])) exit();
 ?>
 <?php
-if(file_exists('data/_sdata-'.$sdata.'/payplug.json'))
-	{
+if(file_exists('data/_sdata-'.$sdata.'/payplug.json')) {
+	$lang0 = $lang;
 	$q1 = file_get_contents('data/_sdata-'.$sdata.'/payplug.json');
 	$a1 = json_decode($q1,true);
+	if(!empty($a1['lng'])) $lang = $a1['lng'];
+	include('plugins/payplug/lang/lang.php');
 	$Uhead .= '<link rel="stylesheet" type="text/css" href="uno/plugins/payplug/ckpayplug/css/ckpayplugBtn0.css" />'."\r\n";
-	if(!empty($a1['act']))
-		{
+	if(!empty($a1['act'])) {
 		// JSON : {"prod":{"0":{"n":"clef de 12","p":8.5,"i":"","q":1},"1":{"n":"tournevis","p":1.5,"i":"","q":2},"2":{"n":"papier craft","p":0.21,"i":"","q":30}},"digital":"Ubusy|readme","ship":"4","name":"Sting","adre":"rue du lac 33234 PLOUG"}
 		// n=nom, p=prix, i=ID, q=quantite
 		// OK : ?payplug=ok&digit=mapage|monplugin|123456789123
@@ -46,6 +47,7 @@ if(file_exists('data/_sdata-'.$sdata.'/payplug.json'))
 		$Ufoot .= $tmp;
 		$Uonload .= "if('ok'==unoGvu('payplug')){unoPop('".T_('Thank you for your payment')."',5000);document.cookie='cart=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';}";
 		$unoPop = 1; // include unoPop.js in output
-		}
 	}
+	$lang = $lang0;
+}
 ?>
