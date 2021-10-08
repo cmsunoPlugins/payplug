@@ -8,6 +8,14 @@ if(isset($_POST['action']) && strip_tags($_POST['action'])=='url') {
 			$q = file_get_contents(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/payplug.json');
 			$k = json_decode($q,true);
 			if($k) $secretkey = (!empty($k['key'])?$k['key']:'');
+			$k['first_name'] = (!empty($_POST['fname'])?$_POST['fname']:'Wxx');
+			$k['last_name'] = (!empty($_POST['name'])?$_POST['name']:'Wyxxz');
+			$k['email'] = (!empty($_POST['mail'])?$_POST['mail']:'wyxxz@example.com');
+			$k['address1'] = '17 rue du lac';
+			$k['postcode'] = '75014';
+			$k['city'] = 'PARIS';
+			$k['country'] = 'FR';
+			$k['delivery_type'] = 'DIGITAL_GOODS';
 		}
 		if(!empty($secretkey)) {
 			require_once(dirname(__FILE__).'/ckpayplug/libPayplug/lib/init.php');
