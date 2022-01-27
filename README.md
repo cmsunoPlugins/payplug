@@ -32,6 +32,7 @@ Works also with digital goods and cart plugin.
 
 ### Versions ###
 
+* 1.4.2 - 27/01/2022 : API V3.5.3
 * 1.4.1 - 05/10/2021 : Option to set form language
 * 1.4 - 01/01/2021 : Payment new API V3.3
 * 1.3 - 15/11/2017 : Payment plugin Update

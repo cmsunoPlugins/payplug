@@ -1,6 +1,8 @@
 <?php
 namespace Payplug\Core;
 
+use Symfony\Component\Dotenv\Dotenv;
+
 /**
  * Defines the routes to PayPlug's API.
  */
@@ -22,6 +24,7 @@ class APIRoutes
     const INSTALLMENT_PLAN_RESOURCE  = '/installment_plans';
     const ONEY_PAYMENT_SIM_RESOURCE  = '/oney_payment_simulations';
     const ACCOUNTING_REPORT_RESOURCE = '/accounting_reports';
+    const PUBLISHABLE_KEYS           = '/publishable_keys';
 
 
     /**
@@ -51,6 +54,15 @@ class APIRoutes
     }
 
     /**
+     * @description set $API_BASE_URL from plugin
+     * @param $apiBaseUrl
+     */
+    public static function setApiBaseUrl($apiBaseUrl)
+    {
+        self::$API_BASE_URL = $apiBaseUrl;
+    }
+
+    /**
      * Gets a route that allows to check whether the remote API is up.
      *
      * @return  string  the full URL to the test resource
@@ -62,3 +74,4 @@ class APIRoutes
 }
 
 APIRoutes::$API_BASE_URL = 'https://api.payplug.com';
+
