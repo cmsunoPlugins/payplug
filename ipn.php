@@ -4,7 +4,7 @@
 include(dirname(__FILE__).'/../../config.php');
 if(file_exists(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/ssite.json')) {
 	$q = file_get_contents(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/ssite.json'); $b = json_decode($q,true);
-	$mailAdmin = $b['mel'];
+	$mailAdmin = (isset($b['mel'])?$b['mel']:false);
 }
 else $mailAdmin = false;
 include(dirname(__FILE__).'/../../template/mailTemplate.php');
@@ -50,7 +50,7 @@ try {
 			// EXPLORE DATA
 			$a = explode("|;", $resource->metadata['customData']);
 			foreach($a as $r) {
-				if(strpos($r,'DIGITAL|')!==false) {
+				if(strpos($r,'DIGITAL|')!==false) { // MARKDOWN PLUGIN
 					$d = explode("|", $r); // 1/ Ubusy ; 2/ shortcode (name) : 3/ key
 					$q = file_get_contents(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/markdown.json'); $b1 = json_decode($q,true);
 					$q = file_get_contents(dirname(__FILE__).'/../../data/'.$d[1].'/site.json'); $b2 = json_decode($q,true);
@@ -77,17 +77,23 @@ try {
 			}
 			if($mailAdmin) {
 				// ORDER ?
-				$msgOrder = '<p style="text-align:right;">'.date("d/m/Y H:i").'</p><p>'; $b = 0; $p = 0; $name = ''; $mail = ''; $Ubusy = ''; $adre = '';
+				$msgOrder = '<p style="text-align:right;">'.date("d/m/Y H:i").'</p><p>';
+				$b = $p = 0;
+				$name = $mail = $Ubusy = $adre = '';
 				$v1 = explode("|;", $resource->metadata['customData']);
 				if(is_array($v1)) foreach($v1 as $v2) {
 					$v3 = explode("|", $v2);
-					if(is_array($v3) && count($v3)>2 && strpos($v2,'ADRESS|')===false) {
-						if(!$b) $b=1;
-						$msgOrder .= $v3[3].' x '.$v3[0].' ('.$v3[1].'&euro;) = '.($v3[3] * $v3[1]).'&euro;<br />';
-						$p += ($v3[3] * $v3[1]);
+					if(is_array($v3) && count($v3)>2 && strpos($v2,'ADRESS|')===false && strpos($v2,'DIGITAL|')===false) {
+						$p1 = trim(str_replace(",",".",$v3[1]));
+						$p3 = trim(str_replace(",",".",$v3[3]));
+						if(!(is_numeric($p1) && is_numeric($p3))) break;
+						$pp = ($p1 * $p3);
+						if(!$b) $b = 1;
+						$msgOrder .= $v3[3].' x '.$v3[0].' ('.$v3[1].'&euro;) = '.$pp.'&euro;<br />';
+						$p += $pp;
 					}
 					if(is_array($v3) && count($v3)>2 && strpos($v2,'ADRESS|')!==false) {
-						$name = $v3[1]; $adre = $v3[2]; $mail = $v3[3]; $Ubusy = $v3[4];
+						$name = trim($v3[1]); $adre = trim($v3[2]); $mail = trim($v3[3]); $Ubusy = $v3[4];
 					}
 				}
 				if($mail && $Ubusy) {
@@ -133,15 +139,16 @@ try {
 		}	
 	}
 }
-catch (\Payplug\Exception\PayplugException $exception) {
-	if($mailAdmin) mailAdmin('PayPlug IPN Error', $exception, $bottom, $top);
+catch(\Payplug\Exception\PayplugException $exception) {
+	file_put_contents(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/_payplug/tmp/exception'.time().'.txt', $exception.' - '.(isset($resource)?serialize($resource):''));
+	if($mailAdmin) mailAdmin('PayPlug IPN Error', $exception.' - '.(isset($resource)?serialize($resource):''), $bottom, $top);
 	sleep(2);exit;
 }
 //
 function VerifIXNID($txn_id,$sdata) { // fonction pour verifier si la depense est deja effectue (1) ou pas (0)
 	$a = array();
 	if($h=opendir(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/_payplug/')) {
-		while (($file=readdir($h))!==false) {
+		while(($file=readdir($h))!==false) {
 			if($file==$txn_id.'.json') {
 				closedir($h); return 1;
 			}
