@@ -32,6 +32,7 @@ Works also with digital goods and cart plugin.
 
 ### Versions ###
 
+* 1.4.4 - 27/09/2022 : Responsive display.
 * 1.4.3 - 14/02/2022 : Fix IPN issue on PHP >= 8.0
 * 1.4.2 - 27/01/2022 : API V3.5.3
 * 1.4.1 - 05/10/2021 : Option to set form language

@@ -6,3 +6,8 @@ table.payplugTO td:nth-child(2){color:#666;}
 .payplugListArchiv{float:left;width:330px;cursor:pointer;text-decoration:underline;}
 #payplugArchData{margin-bottom:10px;}
 #payplugArchiv{margin:15px 10px;}
+#payplugDetail td:nth-child(2){word-break:break-word;}
+@media screen and (max-width:780px){
+	#payplugVente tr{display:block;margin-bottom:10px;}
+	#payplugVente td:nth-child(3),#payplugVente th:nth-child(3),#payplugVente td:nth-child(5),#payplugVente th:nth-child(5){display:block;text-align:left;}
+}

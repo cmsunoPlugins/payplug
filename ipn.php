@@ -141,7 +141,7 @@ try {
 }
 catch(\Payplug\Exception\PayplugException $exception) {
 	file_put_contents(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/_payplug/tmp/exception'.time().'.txt', $exception.' - '.(isset($resource)?serialize($resource):''));
-	if($mailAdmin) mailAdmin('PayPlug IPN Error', $exception.' - '.(isset($resource)?serialize($resource):''), $bottom, $top);
+	if($mailAdmin) mailAdmin('PayPlug IPN Error','EXCEPTION : '.$exception.' - RESOURCE : '.(isset($resource)?serialize($resource):'').' - INPUT : '.$input, $bottom, $top);
 	sleep(2);exit;
 }
 //
