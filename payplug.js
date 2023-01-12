@@ -3,40 +3,86 @@
 // Plugin payplug
 //
 function f_save_payplug(){
-	jQuery(document).ready(function(){
-		var act=document.getElementById('activ').checked?1:0;
-		var key=document.getElementById("payplugKey").value;
-		var off=(document.getElementById('ckpayplugoff').checked?1:0);
-		var lng=document.getElementById("langPayplug").options[document.getElementById("langPayplug").selectedIndex].value;
-		jQuery.post('uno/plugins/payplug/payplug.php',{'action':'save','unox':Unox,'act':act,'key':key,'ckpayplugoff':off,'lng':lng},function(r){
-			f_alert(r);
-			document.getElementById("btSavePayplug").className='bouton fr';
-			if(pass.length>5&&mail.length>5)setTimeout(function(){location.reload();},1000);
-		});
+	let key=document.getElementById("payplugKey").value;
+	let lng=document.getElementById("langPayplug").options[document.getElementById("langPayplug").selectedIndex].value;
+	let x=new FormData();
+	x.set('action','save');
+	x.set('unox',Unox);
+	x.set('key',key);
+	x.set('lng',lng);
+	fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
+	.then(r=>r.text())
+	.then(function(r){
+		f_alert(r);
+		document.getElementById("btSavePayplug").className='bouton fr';
+		if(pass.length>5&&mail.length>5)setTimeout(function(){location.reload();},1000);
 	});
 }
 function f_load_payplug(){
-	jQuery(document).ready(function(){
-		jQuery.ajax({type:'POST',url:'uno/plugins/payplug/payplug.php',data:{'action':'load','unox':Unox},dataType:'json',async:true,success:function(r){
-			if(r.act!=undefined&&r.act==1)document.getElementById('activ').checked=true;else document.getElementById('activ').checked=false;
-			if(r.key!=undefined)document.getElementById('payplugKey').value=r.key;
-			if(r.lng!=undefined&&r.lng)jQuery('#langPayplug option[value="'+r.lng+'"]').prop('selected',true);
-		}});
+	let x=new FormData();
+	x.set('action','load');
+	x.set('unox',Unox);
+	fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
+	.then(r=>r.json())
+	.then(function(r){
+		if(r.key!=undefined)document.getElementById('payplugKey').value=r.key;
+		if(r.lng!=undefined&&r.lng)document.getElementById('langPayplug').value=r.lng;
 	});
 }
 function f_treated_payplug(f,g,h){
-	jQuery.post('uno/plugins/payplug/payplug.php',{'action':'treated','unox':Unox,'id':g},function(r){f_alert(r);});
-	f.parentNode.className="PayplugTreatedYes";
-	f.innerHTML=h;f.className="";f.onclick="";
+	let x=new FormData();
+	x.set('action','treated');
+	x.set('unox',Unox);
+	x.set('id',g);
+	fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
+	.then(r=>r.text())
+	.then(function(r){
+		f_alert(r);
+		f.parentNode.className="PayplugTreatedYes";
+		f.innerHTML=h;f.className="";f.onclick="";
+	});
 }
-function f_archivOrderPayplug(f,g){if(confirm(g)){jQuery.post('uno/plugins/payplug/payplug.php',{'action':'archiv','unox':Unox,'id':f},function(r){f_alert(r);if(r.substr(0,1)!='!')f_payplugVente();});}}
-function f_payplugRestaurOrder(f){jQuery.post('uno/plugins/payplug/payplug.php',{'action':'restaur','unox':Unox,'f':f},function(r){f_alert(r);f_payplugArchiv();});}
+function f_archivOrderPayplug(f,g){
+	if(confirm(g)){
+		let x=new FormData();
+		x.set('action','archiv');
+		x.set('unox',Unox);
+		x.set('id',f);
+		fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
+		.then(r=>r.text())
+		.then(function(r){
+			f_alert(r);
+			if(r.substr(0,1)!='!')f_payplugVente();
+		});
+	}
+}
+function f_payplugRestaurOrder(f){
+	let x=new FormData();
+	x.set('action','restaur');
+	x.set('unox',Unox);
+	x.set('f',f);
+	fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
+	.then(r=>r.text())
+	.then(function(r){
+		f_alert(r);
+		f_payplugArchiv();
+	});
+}
 function f_payplugViewA(f){
-	jQuery('#payplugArchData').empty();
-	jQuery.post('uno/plugins/payplug/payplug.php',{'action':'viewA','unox':Unox,'arch':f},function(r){jQuery('#payplugArchData').append(r);jQuery('#payplugArchData').show();});
+	document.getElementById('payplugArchData').innerHTML='';
+	let x=new FormData();
+	x.set('action','viewA');
+	x.set('unox',Unox);
+	x.set('arch',f);
+	fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
+	.then(r=>r.text())
+	.then(function(r){
+		document.getElementById('payplugArchData').insertAdjacentHTML('beforeend',r);
+		document.getElementById('payplugArchData').style.display="block";
+	});
 }
 function f_payplugArchiv(){
-	jQuery('#payplugArchiv').empty();
+	document.getElementById('payplugArchiv').innerHTML='';
 	document.getElementById('payplugArchiv').style.display="block";
 	document.getElementById('payplugConfig').style.display="none";
 	document.getElementById('payplugVente').style.display="none";
@@ -45,7 +91,15 @@ function f_payplugArchiv(){
 	document.getElementById('payplugC').className="bouton fr";
 	document.getElementById('payplugV').className="bouton fr";
 	document.getElementById('payplugD').style.display="none";
-	jQuery.post('uno/plugins/payplug/payplug.php',{'action':'viewArchiv','unox':Unox},function(r){jQuery('#payplugArchiv').append(r);jQuery('#payplugArchData').hide();});
+	let x=new FormData();
+	x.set('action','viewArchiv');
+	x.set('unox',Unox);
+	fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
+	.then(r=>r.text())
+	.then(function(r){
+		document.getElementById('payplugArchiv').insertAdjacentHTML('beforeend',r);
+		document.getElementById('payplugArchData').style.display="none";
+	});
 }
 function f_payplugConfig(){
 	document.getElementById('payplugArchiv').style.display="none";
@@ -60,16 +114,25 @@ function f_payplugConfig(){
 function f_payplugVente(){
 	document.getElementById('payplugArchiv').style.display="none";
 	document.getElementById('payplugConfig').style.display="none";
-	jQuery('#payplugVente').empty();document.getElementById('payplugVente').style.display="block";
+	document.getElementById('payplugVente').innerHTML='';
+	document.getElementById('payplugVente').style.display="block";
 	document.getElementById('payplugDetail').style.display="none";
 	document.getElementById('payplugA').className="bouton fr";
 	document.getElementById('payplugC').className="bouton fr";
 	document.getElementById('payplugV').className="bouton fr current";
 	document.getElementById('payplugD').style.display="none";
-	jQuery.post('uno/plugins/payplug/payplug.php',{'action':'vente','unox':Unox,'udep':Udep},function(r){jQuery('#payplugVente').append(r);});
+	let x=new FormData();
+	x.set('action','vente');
+	x.set('unox',Unox);
+	x.set('udep',Udep);
+	fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
+	.then(r=>r.text())
+	.then(function(r){
+		document.getElementById('payplugVente').insertAdjacentHTML('beforeend',r);
+	});
 }
 function f_payplugDetail(f){
-	jQuery('#payplugDetail').empty();
+	document.getElementById('payplugDetail').innerHTML='';
 	document.getElementById('payplugArchiv').style.display="none";
 	document.getElementById('payplugConfig').style.display="none";
 	document.getElementById('payplugVente').style.display="none";
@@ -78,14 +141,26 @@ function f_payplugDetail(f){
 	document.getElementById('payplugC').className="bouton fr";
 	document.getElementById('payplugV').className="bouton fr";
 	document.getElementById('payplugD').style.display="block";
-	jQuery.post('uno/plugins/payplug/payplug.php',{'action':'detail','unox':Unox,'id':f},function(r){
-		if(r.substr(0,1)!='!')jQuery('#payplugDetail').append(r);
+	let x=new FormData();
+	x.set('action','detail');
+	x.set('unox',Unox);
+	x.set('id',f);
+	fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
+	.then(r=>r.text())
+	.then(function(r){
+		if(r.substr(0,1)!='!')document.getElementById('payplugDetail').insertAdjacentHTML('beforeend',r);
 		else f_alert(r);
 	});
 }
 function f_supp_payplug(f,g){
 	f.parentNode.parentNode.removeChild(f.parentNode);
-	jQuery.post('uno/plugins/payplug/payplug.php',{'action':'supptest','unox':Unox,'file':g},function(r){f_alert(r);});
+	let x=new FormData();
+	x.set('action','suppsandbox');
+	x.set('unox',Unox);
+	x.set('file',g);
+	fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
+	.then(r=>r.text())
+	.then(r=>f_alert(r));
 }
 //
 f_load_payplug();f_payplugVente();

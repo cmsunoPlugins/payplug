@@ -23,15 +23,19 @@ u::::::::::::::u  n::::n    n::::n  o:::::ooooo:::::o
 
 ## Payplug ##
 
-Like Paypal. Adds a button in CKEditor to create  as many Payplug buttons.
-More efficient and economical for sale by CB or Mastercard.
+Payplug gateway in addition to the Payment plugin.
+Efficient and economical for sale by CB or Mastercard.
 Sales are checked and recorded with IPN return.
-Works also with digital goods and cart plugin.
+Works also with digital goods.
 
 [CMSUno](https://github.com/boiteasite/cmsuno)
 
 ### Versions ###
 
+* 1.5 - 12/01/2023 : 
+	* API V3.5.5
+	* Remove Payplug button in CkEditor. You should now use Payment 'add to cart' button.
+	* JQuery free.
 * 1.4.4 - 27/09/2022 : Responsive display.
 * 1.4.3 - 14/02/2022 : Fix IPN issue on PHP >= 8.0
 * 1.4.2 - 27/01/2022 : API V3.5.3

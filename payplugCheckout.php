@@ -18,7 +18,7 @@ if(isset($_POST['action']) && strip_tags($_POST['action'])=='url') {
 			$k['delivery_type'] = 'DIGITAL_GOODS';
 		}
 		if(!empty($secretkey)) {
-			require_once(dirname(__FILE__).'/ckpayplug/libPayplug/lib/init.php');
+			require_once(dirname(__FILE__).'/lib/init.php');
 			Payplug\Payplug::init(array('secretKey' => $secretkey));
 			$cart = ""; $amo = 0; $digit = "";
 			$a = json_decode(strip_tags(stripslashes($_POST['cart'])),true);

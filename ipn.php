@@ -18,7 +18,7 @@ if(file_exists(dirname(__FILE__).'/../../data/_sdata-'.$sdata.'/payplug.json')) 
 else die();
 //
 // 3 - INIT AND GET POST DATAS
-require_once(dirname(__FILE__).'/ckpayplug/libPayplug/lib/init.php');
+require_once(dirname(__FILE__).'/lib/init.php');
 Payplug\Payplug::init(array('secretKey' => $secretkey));
 $input = file_get_contents('php://input');
 //

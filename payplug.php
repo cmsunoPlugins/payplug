@@ -1,13 +1,13 @@
 <?php
 session_start(); 
-if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])!='xmlhttprequest') {sleep(2);exit;} // ajax request
 if(!isset($_POST['unox']) || $_POST['unox']!=$_SESSION['unox']) {sleep(2);exit;} // appel depuis uno.php
 ?>
 <?php
 include('../../config.php');
+include('lang/lang.php');
+$busy = (isset($_POST['ubusy'])?preg_replace("/[^A-Za-z0-9-_]/",'',$_POST['ubusy']):'index');
 if(!is_dir('../../data/_sdata-'.$sdata.'/_payplug/')) mkdir('../../data/_sdata-'.$sdata.'/_payplug/',0711);
 if(!is_dir('../../data/_sdata-'.$sdata.'/_payplug/tmp/')) mkdir('../../data/_sdata-'.$sdata.'/_payplug/tmp/');
-include('lang/lang.php');
 // ********************* actions *************************************************************************
 if(isset($_POST['action'])) {
 	switch ($_POST['action']) {
@@ -22,16 +22,11 @@ if(isset($_POST['action'])) {
 			<h2><?php echo T_("Payplug");?></h2>
 			<div id="payplugConfig" style="display:none;">
 				<img style="float:right;margin:10px;" src="uno/plugins/payplug/img/payplugLogo.png" />
-				<p><?php echo T_("This plugin allows you to add different Payplug buttons in your website.");?></p>
-				<p><?php echo T_("It is used with the button") .'<img src="uno/plugins/payplug/ckpayplug/icons/ckpayplug.png" style="border:1px solid #aaa;padding:3px;margin:0 6px -5px;border-radius:2px;" />' . T_("added to the text editor when the plugin is enabled.");?></p>
+				<p><?php echo T_("This plugin allows you to add the Payplug payment gateway to the Payment plugin.");?></p>
+				<p><?php echo T_("It is an easy way to pay by card without subscription for the customer.");?></p>
 				<p><?php echo T_("Create your account on");?>&nbsp;<a href='https://www.payplug.fr/'>Payplug</a>.</p>
 				<h3><?php echo T_("Default Settings");?> :</h3>
 				<table class="hForm">
-					<tr>
-						<td><label><?php echo T_("Activate");?></label></td>
-						<td><input type="checkbox" class="input" name="activ" id="activ" /></td>
-						<td><em><?php echo T_("Enable the payment with Payplug");?></em></td>
-					</tr>
 					<tr>
 						<td><label><?php echo T_("Secret Key");?></label></td>
 						<td><input type="text" class="input" name="payplugKey" id="payplugKey" style="width:150px;" /></td>
@@ -44,24 +39,18 @@ if(isset($_POST['action'])) {
 					</tr>
 					<tr>
 						<td><label><?php echo T_("Return URL");?></label></td>
-						<?php $q = file_get_contents('../../data/busy.json'); $a = json_decode($q,true); $home = $a['nom']; ?>
-						<td style="vertical-align:middle;padding:0 10px;"><?php echo substr($_SERVER['HTTP_REFERER'],0,-7).($home?$home:'index').'.html?payplug=ok';?></td>
+						<td style="vertical-align:middle;padding:0 10px;"><?php echo substr($_SERVER['HTTP_REFERER'],0,-7).$busy.'.html?payplug=ok';?></td>
 						<td><em><?php echo T_("Return URL after success payment. (This is the active page)"); ?></em></td>
 					</tr>
 					<tr>
 						<td><label><?php echo T_("Failure URL");?></label></td>
-						<td style="vertical-align:middle;padding:0 10px;"><?php echo substr($_SERVER['HTTP_REFERER'],0,-7).($home?$home:'index').'.html?payplug=error';?></td>
+						<td style="vertical-align:middle;padding:0 10px;"><?php echo substr($_SERVER['HTTP_REFERER'],0,-7).$busy.'.html?payplug=error';?></td>
 						<td><em><?php echo T_("Return URL after error in payment. (This is the active page)"); ?></em></td>
 					</tr>
 				</table>
 				<br />
 				<h3><?php echo T_("Options :");?></h3>
 				<table class="hForm">
-					<tr>
-						<td><label><?php echo T_("No Payplug button");?></label></td>
-						<td><input type="checkbox" name="ckpayplugoff" id="ckpayplugoff" /></td>
-						<td><em><?php echo T_("You don't want to use the CKEditor Payplug Button.");?></em></td>
-					</tr>
 					<tr>
 						<td><label><?php echo T_("Lang");?></label></td>
 						<td>
@@ -94,25 +83,23 @@ if(isset($_POST['action'])) {
 		break;
 		// ********************************************************************************************
 		case 'save':
-		$q = file_get_contents('../../data/busy.json'); $a = json_decode($q,true); $home = $a['nom'];
 		$a = Array();
 		if(file_exists('../../data/_sdata-'.$sdata.'/payplug.json')) {
 			$q = file_get_contents('../../data/_sdata-'.$sdata.'/payplug.json');
 			if($q) $a = json_decode($q,true);
 		}
-		$a['act'] = $_POST['act'];
-		if(file_exists('../../data/payment.json')) {
+		if(file_exists('../../data/payment.json')) { // idem payplugMake2.php
 			$q = file_get_contents('../../data/payment.json'); $b = json_decode($q,true);
-			if(empty($b['method'])) $b['method'] = array();
-			$b['method']['payplug'] = strip_tags($_POST['act']);
-			file_put_contents('../../data/payment.json',json_encode($b));
+			if(empty($b['method'])) $b['method'] = array('payplug'=>1);
+			else if(empty($b['method']['payplug'])) $b['method']['payplug'] = 1;
+			else $b = 0;
+			if($b) file_put_contents('../../data/payment.json',json_encode($b));
 		}
 		$a['key'] = strip_tags($_POST['key']);
 		$a['lng'] = strip_tags($_POST['lng']);
-		$a['ckpayplugoff'] = ($_POST['ckpayplugoff']?1:0);
 		$a['url'] = substr($_SERVER['HTTP_REFERER'],0,-4).'/plugins/payplug/ipn.php';
-		$a['home'] = substr($_SERVER['HTTP_REFERER'],0,-7).($home?$home:'index').'.html?payplug=ok';
-		$a['err'] = substr($_SERVER['HTTP_REFERER'],0,-7).($home?$home:'index').'.html?payplug=error';
+		$a['home'] = substr($_SERVER['HTTP_REFERER'],0,-7).$busy.'.html?payplug=ok';
+		$a['err'] = substr($_SERVER['HTTP_REFERER'],0,-7).$busy.'.html?payplug=error';
 		$a['par'] = '../../../data/_sdata-'.$sdata.'/_payplug';
 		$out = json_encode($a);
 		if(file_put_contents('../../data/_sdata-'.$sdata.'/payplug.json', $out)) echo T_('Setup OK');
@@ -277,7 +264,7 @@ if(isset($_POST['action'])) {
 		else echo '!'.T_('Error');
 		break;
 		// ********************************************************************************************
-		case 'supptest':
+		case 'suppsandbox':
 		if(file_exists('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['file'].'.json')) {
 			unlink('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['file'].'.json');
 			echo T_('Removed');
