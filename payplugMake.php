@@ -41,7 +41,7 @@ if(file_exists('data/_sdata-'.$sdata.'/payplug.json')) {
 			$tmp .= "x.send(p);";
 	$tmp .= "}};";
 	$tmp .= "function payplugAlert(f){var a=document.getElementById('popAlert');a.className=a.className.replace('w3-hide','w3-show');a.innerHTML=f;setTimeout(function(){a.innerHTML='';a.className=a.className.replace('w3-show','w3-hide');if(a.className.indexOf('w3-hide')==-1)a.className+=' w3-hide';},5000);};";
-	// Call from paymentMake.php :
+	// payplugCart() Called from paymentMake.php :
 	$tmp .= "function payplugCart(f){payplugdatas=f;var a=document.getElementById('unoPop');if(a!=null)a.parentNode.removeChild(a);unoPop('".$o."',0);};";
 	//
 	$tmp .= "</script>"."\r\n";

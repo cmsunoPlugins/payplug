@@ -22,7 +22,7 @@ function f_load_payplug(){
 	let x=new FormData();
 	x.set('action','load');
 	x.set('unox',Unox);
-	fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
+	fetch('uno/plugins/payplug/payplug.php?r='+Math.random(),{method:'post',body:x})
 	.then(r=>r.json())
 	.then(function(r){
 		if(r.key!=undefined)document.getElementById('payplugKey').value=r.key;

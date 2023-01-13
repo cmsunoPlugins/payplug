@@ -209,7 +209,8 @@ if(isset($_POST['action'])) {
 		if(is_dir($p) && $h=opendir($p)) {
 			$b = array();
 			while(($d=readdir($h))!==false) {
-				$ext=explode('.',$d); $ext=$ext[count($ext)-1];
+				$ext = explode('.',$d);
+				$ext = $ext[count($ext)-1];
 				if($d!='.' && $d!='..' && $ext=='json') {
 					if(strpos($d,'__')!==false) {
 						$a = explode('__',$d);
@@ -237,9 +238,10 @@ if(isset($_POST['action'])) {
 		break;
 		// ********************************************************************************************
 		case 'viewA':
-		if(isset($_POST['arch']) && file_exists('../../data/_sdata-'.$sdata.'/_payplug/archive/'.$_POST['arch'])) {
+		if(isset($_POST['arch']) && file_exists('../../data/_sdata-'.$sdata.'/_payplug/archive/'.strip_tags($_POST['arch']))) {
 			$q = @file_get_contents('../../data/_sdata-'.$sdata.'/_payplug/archive/'.strip_tags($_POST['arch']));
-			$a = json_decode($q,true); $o = '<h3>'.T_('Archives').'</h3><table class="payplugTO">';
+			$a = json_decode($q,true);
+			$o = '<h3>'.T_('Archives').'</h3><table class="payplugTO">';
 			foreach($a as $k=>$v) {
 				if($k=='time') $v .= ' => '.date("d/m/Y H:i",$v);
 				$o .= '<tr><td>'.$k.'</td><td>'.(is_array($v)?json_encode($v):$v).'</td></tr>';
@@ -251,7 +253,8 @@ if(isset($_POST['action'])) {
 		case 'detail':
 		if(isset($_POST['id']) && file_exists('../../data/_sdata-'.$sdata.'/_payplug/'.strip_tags($_POST['id']).'.json')) {
 			$q = @file_get_contents('../../data/_sdata-'.$sdata.'/_payplug/'.strip_tags($_POST['id']).'.json');
-			$a = json_decode($q,true); $o = '<h3>'.T_('Payment Details').'</h3><table class="payplugTO">';
+			$a = json_decode($q,true);
+			$o = '<h3>'.T_('Payment Details').'</h3><table class="payplugTO">';
 			foreach($a as $k=>$v) {
 				if($k=='time') $v .= ' => '.date("d/m/Y H:i",$v);
 				$o .= '<tr><td>'.$k.'</td><td>'.(is_array($v)?json_encode($v):$v).'</td></tr>';
@@ -265,8 +268,8 @@ if(isset($_POST['action'])) {
 		break;
 		// ********************************************************************************************
 		case 'suppsandbox':
-		if(file_exists('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['file'].'.json')) {
-			unlink('../../data/_sdata-'.$sdata.'/_payplug/'.$_POST['file'].'.json');
+		if(file_exists('../../data/_sdata-'.$sdata.'/_payplug/'.strip_tags($_POST['file']).'.json')) {
+			unlink('../../data/_sdata-'.$sdata.'/_payplug/'.strip_tags($_POST['file']).'.json');
 			echo T_('Removed');
 		}
 		else echo '!'.T_('Error');
