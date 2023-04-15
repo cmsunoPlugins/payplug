@@ -8,6 +8,7 @@ function f_save_payplug(){
 	let x=new FormData();
 	x.set('action','save');
 	x.set('unox',Unox);
+	x.set('ubusy',Ubusy);
 	x.set('key',key);
 	x.set('lng',lng);
 	fetch('uno/plugins/payplug/payplug.php',{method:'post',body:x})
