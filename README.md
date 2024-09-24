@@ -32,6 +32,7 @@ Works also with digital goods.
 
 ### Versions ###
 
+* 1.6 - 24/09/2024 : Send email via SMTP if Newsletter plugin is SMTP
 * 1.5.1 - 15/04/2023 : Add post ubusy
 * 1.5 - 12/01/2023 : 
 	* API V3.5.5
