@@ -239,11 +239,7 @@ function mailAdmin($tit, $msg, $bottom, $top, $url=false, $attach=false) {
 		$phm->Body = stripslashes($msgH);		
 		$phm->AltBody = stripslashes($msgT);
 		if($attach && file_exists($attach)) $phm->AddAttachment($attach);
-		if(empty($news['met'])) { // PHP mail()
-			if($phm->send()) return true;
-			else return false;
-		}
-		else { // SMTP
+		if(!empty($news['met'])) { // SMTP
 			$phm->IsSMTP();
 			$phm->SMTPDebug = 0;  // debugging: 1 = errors and messages, 2 = messages only
 			$phm->SMTPAuth = true;  // authentication enabled
@@ -252,9 +248,9 @@ function mailAdmin($tit, $msg, $bottom, $top, $url=false, $attach=false) {
 			$phm->Host = ($news['met']=='gmail'?'smtp.gmail.com':$news['gmh']); // 'smtp.gmail.com'...
 			$phm->Username = $news['gma'];
 			$phm->Password = utf8_encode($news['gmp']);
-			if($phm->Send()) return true;
-			else return false;
 		}
+		if($phm->Send()) return true;
+		else return false;
 	}
 	else {
 		$rn = "\r\n";
@@ -296,11 +292,7 @@ function mailUser($dest, $tit, $msg, $bottom, $top, $url=false, $attach=false) {
 		$phm->Body = stripslashes($msgH);		
 		$phm->AltBody = stripslashes($msgT);
 		if($attach && file_exists($attach)) $phm->AddAttachment($attach);
-		if(empty($news['met'])) { // PHP mail()
-			if($phm->send()) return true;
-			else return false;
-		}
-		else { // SMTP
+		if(!empty($news['met'])) { // SMTP
 			$phm->IsSMTP();
 			$phm->SMTPDebug = 0;  // debugging: 1 = errors and messages, 2 = messages only
 			$phm->SMTPAuth = true;  // authentication enabled
@@ -309,9 +301,9 @@ function mailUser($dest, $tit, $msg, $bottom, $top, $url=false, $attach=false) {
 			$phm->Host = ($news['met']=='gmail'?'smtp.gmail.com':$news['gmh']); // 'smtp.gmail.com'...
 			$phm->Username = $news['gma'];
 			$phm->Password = utf8_encode($news['gmp']);
-			if($phm->Send()) return true;
-			else return false;
 		}
+		if($phm->Send()) return true;
+		else return false;
 	}
 	else {
 		$rn = "\r\n";
